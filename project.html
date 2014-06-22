@@ -1,0 +1,2040 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title>Data Loading</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: rgb(88, 72, 246)
+   }
+
+   pre .number {
+     color: rgb(0, 0, 205);
+   }
+
+   pre .comment {
+     color: rgb(76, 136, 107);
+   }
+
+   pre .keyword {
+     color: rgb(0, 0, 255);
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: rgb(3, 106, 7);
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+</head>
+
+<body>
+<h1>Data Loading</h1>
+
+<pre><code class="r">library(caret)
+</code></pre>
+
+<pre><code>## Loading required package: lattice
+## Loading required package: ggplot2
+</code></pre>
+
+<pre><code class="r">training &lt;- read.csv(&quot;pml-training.csv&quot;, header = TRUE)
+testing  &lt;- read.csv(&quot;pml-testing.csv&quot;, header = TRUE)
+</code></pre>
+
+<h2>Summary of Data</h2>
+
+<pre><code class="r">nrow(training)
+</code></pre>
+
+<pre><code>## [1] 19622
+</code></pre>
+
+<pre><code class="r">names(training)
+</code></pre>
+
+<pre><code>##   [1] &quot;X&quot;                        &quot;user_name&quot;               
+##   [3] &quot;raw_timestamp_part_1&quot;     &quot;raw_timestamp_part_2&quot;    
+##   [5] &quot;cvtd_timestamp&quot;           &quot;new_window&quot;              
+##   [7] &quot;num_window&quot;               &quot;roll_belt&quot;               
+##   [9] &quot;pitch_belt&quot;               &quot;yaw_belt&quot;                
+##  [11] &quot;total_accel_belt&quot;         &quot;kurtosis_roll_belt&quot;      
+##  [13] &quot;kurtosis_picth_belt&quot;      &quot;kurtosis_yaw_belt&quot;       
+##  [15] &quot;skewness_roll_belt&quot;       &quot;skewness_roll_belt.1&quot;    
+##  [17] &quot;skewness_yaw_belt&quot;        &quot;max_roll_belt&quot;           
+##  [19] &quot;max_picth_belt&quot;           &quot;max_yaw_belt&quot;            
+##  [21] &quot;min_roll_belt&quot;            &quot;min_pitch_belt&quot;          
+##  [23] &quot;min_yaw_belt&quot;             &quot;amplitude_roll_belt&quot;     
+##  [25] &quot;amplitude_pitch_belt&quot;     &quot;amplitude_yaw_belt&quot;      
+##  [27] &quot;var_total_accel_belt&quot;     &quot;avg_roll_belt&quot;           
+##  [29] &quot;stddev_roll_belt&quot;         &quot;var_roll_belt&quot;           
+##  [31] &quot;avg_pitch_belt&quot;           &quot;stddev_pitch_belt&quot;       
+##  [33] &quot;var_pitch_belt&quot;           &quot;avg_yaw_belt&quot;            
+##  [35] &quot;stddev_yaw_belt&quot;          &quot;var_yaw_belt&quot;            
+##  [37] &quot;gyros_belt_x&quot;             &quot;gyros_belt_y&quot;            
+##  [39] &quot;gyros_belt_z&quot;             &quot;accel_belt_x&quot;            
+##  [41] &quot;accel_belt_y&quot;             &quot;accel_belt_z&quot;            
+##  [43] &quot;magnet_belt_x&quot;            &quot;magnet_belt_y&quot;           
+##  [45] &quot;magnet_belt_z&quot;            &quot;roll_arm&quot;                
+##  [47] &quot;pitch_arm&quot;                &quot;yaw_arm&quot;                 
+##  [49] &quot;total_accel_arm&quot;          &quot;var_accel_arm&quot;           
+##  [51] &quot;avg_roll_arm&quot;             &quot;stddev_roll_arm&quot;         
+##  [53] &quot;var_roll_arm&quot;             &quot;avg_pitch_arm&quot;           
+##  [55] &quot;stddev_pitch_arm&quot;         &quot;var_pitch_arm&quot;           
+##  [57] &quot;avg_yaw_arm&quot;              &quot;stddev_yaw_arm&quot;          
+##  [59] &quot;var_yaw_arm&quot;              &quot;gyros_arm_x&quot;             
+##  [61] &quot;gyros_arm_y&quot;              &quot;gyros_arm_z&quot;             
+##  [63] &quot;accel_arm_x&quot;              &quot;accel_arm_y&quot;             
+##  [65] &quot;accel_arm_z&quot;              &quot;magnet_arm_x&quot;            
+##  [67] &quot;magnet_arm_y&quot;             &quot;magnet_arm_z&quot;            
+##  [69] &quot;kurtosis_roll_arm&quot;        &quot;kurtosis_picth_arm&quot;      
+##  [71] &quot;kurtosis_yaw_arm&quot;         &quot;skewness_roll_arm&quot;       
+##  [73] &quot;skewness_pitch_arm&quot;       &quot;skewness_yaw_arm&quot;        
+##  [75] &quot;max_roll_arm&quot;             &quot;max_picth_arm&quot;           
+##  [77] &quot;max_yaw_arm&quot;              &quot;min_roll_arm&quot;            
+##  [79] &quot;min_pitch_arm&quot;            &quot;min_yaw_arm&quot;             
+##  [81] &quot;amplitude_roll_arm&quot;       &quot;amplitude_pitch_arm&quot;     
+##  [83] &quot;amplitude_yaw_arm&quot;        &quot;roll_dumbbell&quot;           
+##  [85] &quot;pitch_dumbbell&quot;           &quot;yaw_dumbbell&quot;            
+##  [87] &quot;kurtosis_roll_dumbbell&quot;   &quot;kurtosis_picth_dumbbell&quot; 
+##  [89] &quot;kurtosis_yaw_dumbbell&quot;    &quot;skewness_roll_dumbbell&quot;  
+##  [91] &quot;skewness_pitch_dumbbell&quot;  &quot;skewness_yaw_dumbbell&quot;   
+##  [93] &quot;max_roll_dumbbell&quot;        &quot;max_picth_dumbbell&quot;      
+##  [95] &quot;max_yaw_dumbbell&quot;         &quot;min_roll_dumbbell&quot;       
+##  [97] &quot;min_pitch_dumbbell&quot;       &quot;min_yaw_dumbbell&quot;        
+##  [99] &quot;amplitude_roll_dumbbell&quot;  &quot;amplitude_pitch_dumbbell&quot;
+## [101] &quot;amplitude_yaw_dumbbell&quot;   &quot;total_accel_dumbbell&quot;    
+## [103] &quot;var_accel_dumbbell&quot;       &quot;avg_roll_dumbbell&quot;       
+## [105] &quot;stddev_roll_dumbbell&quot;     &quot;var_roll_dumbbell&quot;       
+## [107] &quot;avg_pitch_dumbbell&quot;       &quot;stddev_pitch_dumbbell&quot;   
+## [109] &quot;var_pitch_dumbbell&quot;       &quot;avg_yaw_dumbbell&quot;        
+## [111] &quot;stddev_yaw_dumbbell&quot;      &quot;var_yaw_dumbbell&quot;        
+## [113] &quot;gyros_dumbbell_x&quot;         &quot;gyros_dumbbell_y&quot;        
+## [115] &quot;gyros_dumbbell_z&quot;         &quot;accel_dumbbell_x&quot;        
+## [117] &quot;accel_dumbbell_y&quot;         &quot;accel_dumbbell_z&quot;        
+## [119] &quot;magnet_dumbbell_x&quot;        &quot;magnet_dumbbell_y&quot;       
+## [121] &quot;magnet_dumbbell_z&quot;        &quot;roll_forearm&quot;            
+## [123] &quot;pitch_forearm&quot;            &quot;yaw_forearm&quot;             
+## [125] &quot;kurtosis_roll_forearm&quot;    &quot;kurtosis_picth_forearm&quot;  
+## [127] &quot;kurtosis_yaw_forearm&quot;     &quot;skewness_roll_forearm&quot;   
+## [129] &quot;skewness_pitch_forearm&quot;   &quot;skewness_yaw_forearm&quot;    
+## [131] &quot;max_roll_forearm&quot;         &quot;max_picth_forearm&quot;       
+## [133] &quot;max_yaw_forearm&quot;          &quot;min_roll_forearm&quot;        
+## [135] &quot;min_pitch_forearm&quot;        &quot;min_yaw_forearm&quot;         
+## [137] &quot;amplitude_roll_forearm&quot;   &quot;amplitude_pitch_forearm&quot; 
+## [139] &quot;amplitude_yaw_forearm&quot;    &quot;total_accel_forearm&quot;     
+## [141] &quot;var_accel_forearm&quot;        &quot;avg_roll_forearm&quot;        
+## [143] &quot;stddev_roll_forearm&quot;      &quot;var_roll_forearm&quot;        
+## [145] &quot;avg_pitch_forearm&quot;        &quot;stddev_pitch_forearm&quot;    
+## [147] &quot;var_pitch_forearm&quot;        &quot;avg_yaw_forearm&quot;         
+## [149] &quot;stddev_yaw_forearm&quot;       &quot;var_yaw_forearm&quot;         
+## [151] &quot;gyros_forearm_x&quot;          &quot;gyros_forearm_y&quot;         
+## [153] &quot;gyros_forearm_z&quot;          &quot;accel_forearm_x&quot;         
+## [155] &quot;accel_forearm_y&quot;          &quot;accel_forearm_z&quot;         
+## [157] &quot;magnet_forearm_x&quot;         &quot;magnet_forearm_y&quot;        
+## [159] &quot;magnet_forearm_z&quot;         &quot;classe&quot;
+</code></pre>
+
+<pre><code class="r">nrow(testing)
+</code></pre>
+
+<pre><code>## [1] 20
+</code></pre>
+
+<pre><code class="r">names(testing)
+</code></pre>
+
+<pre><code>##   [1] &quot;X&quot;                        &quot;user_name&quot;               
+##   [3] &quot;raw_timestamp_part_1&quot;     &quot;raw_timestamp_part_2&quot;    
+##   [5] &quot;cvtd_timestamp&quot;           &quot;new_window&quot;              
+##   [7] &quot;num_window&quot;               &quot;roll_belt&quot;               
+##   [9] &quot;pitch_belt&quot;               &quot;yaw_belt&quot;                
+##  [11] &quot;total_accel_belt&quot;         &quot;kurtosis_roll_belt&quot;      
+##  [13] &quot;kurtosis_picth_belt&quot;      &quot;kurtosis_yaw_belt&quot;       
+##  [15] &quot;skewness_roll_belt&quot;       &quot;skewness_roll_belt.1&quot;    
+##  [17] &quot;skewness_yaw_belt&quot;        &quot;max_roll_belt&quot;           
+##  [19] &quot;max_picth_belt&quot;           &quot;max_yaw_belt&quot;            
+##  [21] &quot;min_roll_belt&quot;            &quot;min_pitch_belt&quot;          
+##  [23] &quot;min_yaw_belt&quot;             &quot;amplitude_roll_belt&quot;     
+##  [25] &quot;amplitude_pitch_belt&quot;     &quot;amplitude_yaw_belt&quot;      
+##  [27] &quot;var_total_accel_belt&quot;     &quot;avg_roll_belt&quot;           
+##  [29] &quot;stddev_roll_belt&quot;         &quot;var_roll_belt&quot;           
+##  [31] &quot;avg_pitch_belt&quot;           &quot;stddev_pitch_belt&quot;       
+##  [33] &quot;var_pitch_belt&quot;           &quot;avg_yaw_belt&quot;            
+##  [35] &quot;stddev_yaw_belt&quot;          &quot;var_yaw_belt&quot;            
+##  [37] &quot;gyros_belt_x&quot;             &quot;gyros_belt_y&quot;            
+##  [39] &quot;gyros_belt_z&quot;             &quot;accel_belt_x&quot;            
+##  [41] &quot;accel_belt_y&quot;             &quot;accel_belt_z&quot;            
+##  [43] &quot;magnet_belt_x&quot;            &quot;magnet_belt_y&quot;           
+##  [45] &quot;magnet_belt_z&quot;            &quot;roll_arm&quot;                
+##  [47] &quot;pitch_arm&quot;                &quot;yaw_arm&quot;                 
+##  [49] &quot;total_accel_arm&quot;          &quot;var_accel_arm&quot;           
+##  [51] &quot;avg_roll_arm&quot;             &quot;stddev_roll_arm&quot;         
+##  [53] &quot;var_roll_arm&quot;             &quot;avg_pitch_arm&quot;           
+##  [55] &quot;stddev_pitch_arm&quot;         &quot;var_pitch_arm&quot;           
+##  [57] &quot;avg_yaw_arm&quot;              &quot;stddev_yaw_arm&quot;          
+##  [59] &quot;var_yaw_arm&quot;              &quot;gyros_arm_x&quot;             
+##  [61] &quot;gyros_arm_y&quot;              &quot;gyros_arm_z&quot;             
+##  [63] &quot;accel_arm_x&quot;              &quot;accel_arm_y&quot;             
+##  [65] &quot;accel_arm_z&quot;              &quot;magnet_arm_x&quot;            
+##  [67] &quot;magnet_arm_y&quot;             &quot;magnet_arm_z&quot;            
+##  [69] &quot;kurtosis_roll_arm&quot;        &quot;kurtosis_picth_arm&quot;      
+##  [71] &quot;kurtosis_yaw_arm&quot;         &quot;skewness_roll_arm&quot;       
+##  [73] &quot;skewness_pitch_arm&quot;       &quot;skewness_yaw_arm&quot;        
+##  [75] &quot;max_roll_arm&quot;             &quot;max_picth_arm&quot;           
+##  [77] &quot;max_yaw_arm&quot;              &quot;min_roll_arm&quot;            
+##  [79] &quot;min_pitch_arm&quot;            &quot;min_yaw_arm&quot;             
+##  [81] &quot;amplitude_roll_arm&quot;       &quot;amplitude_pitch_arm&quot;     
+##  [83] &quot;amplitude_yaw_arm&quot;        &quot;roll_dumbbell&quot;           
+##  [85] &quot;pitch_dumbbell&quot;           &quot;yaw_dumbbell&quot;            
+##  [87] &quot;kurtosis_roll_dumbbell&quot;   &quot;kurtosis_picth_dumbbell&quot; 
+##  [89] &quot;kurtosis_yaw_dumbbell&quot;    &quot;skewness_roll_dumbbell&quot;  
+##  [91] &quot;skewness_pitch_dumbbell&quot;  &quot;skewness_yaw_dumbbell&quot;   
+##  [93] &quot;max_roll_dumbbell&quot;        &quot;max_picth_dumbbell&quot;      
+##  [95] &quot;max_yaw_dumbbell&quot;         &quot;min_roll_dumbbell&quot;       
+##  [97] &quot;min_pitch_dumbbell&quot;       &quot;min_yaw_dumbbell&quot;        
+##  [99] &quot;amplitude_roll_dumbbell&quot;  &quot;amplitude_pitch_dumbbell&quot;
+## [101] &quot;amplitude_yaw_dumbbell&quot;   &quot;total_accel_dumbbell&quot;    
+## [103] &quot;var_accel_dumbbell&quot;       &quot;avg_roll_dumbbell&quot;       
+## [105] &quot;stddev_roll_dumbbell&quot;     &quot;var_roll_dumbbell&quot;       
+## [107] &quot;avg_pitch_dumbbell&quot;       &quot;stddev_pitch_dumbbell&quot;   
+## [109] &quot;var_pitch_dumbbell&quot;       &quot;avg_yaw_dumbbell&quot;        
+## [111] &quot;stddev_yaw_dumbbell&quot;      &quot;var_yaw_dumbbell&quot;        
+## [113] &quot;gyros_dumbbell_x&quot;         &quot;gyros_dumbbell_y&quot;        
+## [115] &quot;gyros_dumbbell_z&quot;         &quot;accel_dumbbell_x&quot;        
+## [117] &quot;accel_dumbbell_y&quot;         &quot;accel_dumbbell_z&quot;        
+## [119] &quot;magnet_dumbbell_x&quot;        &quot;magnet_dumbbell_y&quot;       
+## [121] &quot;magnet_dumbbell_z&quot;        &quot;roll_forearm&quot;            
+## [123] &quot;pitch_forearm&quot;            &quot;yaw_forearm&quot;             
+## [125] &quot;kurtosis_roll_forearm&quot;    &quot;kurtosis_picth_forearm&quot;  
+## [127] &quot;kurtosis_yaw_forearm&quot;     &quot;skewness_roll_forearm&quot;   
+## [129] &quot;skewness_pitch_forearm&quot;   &quot;skewness_yaw_forearm&quot;    
+## [131] &quot;max_roll_forearm&quot;         &quot;max_picth_forearm&quot;       
+## [133] &quot;max_yaw_forearm&quot;          &quot;min_roll_forearm&quot;        
+## [135] &quot;min_pitch_forearm&quot;        &quot;min_yaw_forearm&quot;         
+## [137] &quot;amplitude_roll_forearm&quot;   &quot;amplitude_pitch_forearm&quot; 
+## [139] &quot;amplitude_yaw_forearm&quot;    &quot;total_accel_forearm&quot;     
+## [141] &quot;var_accel_forearm&quot;        &quot;avg_roll_forearm&quot;        
+## [143] &quot;stddev_roll_forearm&quot;      &quot;var_roll_forearm&quot;        
+## [145] &quot;avg_pitch_forearm&quot;        &quot;stddev_pitch_forearm&quot;    
+## [147] &quot;var_pitch_forearm&quot;        &quot;avg_yaw_forearm&quot;         
+## [149] &quot;stddev_yaw_forearm&quot;       &quot;var_yaw_forearm&quot;         
+## [151] &quot;gyros_forearm_x&quot;          &quot;gyros_forearm_y&quot;         
+## [153] &quot;gyros_forearm_z&quot;          &quot;accel_forearm_x&quot;         
+## [155] &quot;accel_forearm_y&quot;          &quot;accel_forearm_z&quot;         
+## [157] &quot;magnet_forearm_x&quot;         &quot;magnet_forearm_y&quot;        
+## [159] &quot;magnet_forearm_z&quot;         &quot;problem_id&quot;
+</code></pre>
+
+<pre><code class="r">summary(training)
+</code></pre>
+
+<pre><code>##        X            user_name    raw_timestamp_part_1 raw_timestamp_part_2
+##  Min.   :    1   adelmo  :3892   Min.   :1.32e+09     Min.   :   294      
+##  1st Qu.: 4906   carlitos:3112   1st Qu.:1.32e+09     1st Qu.:252912      
+##  Median : 9812   charles :3536   Median :1.32e+09     Median :496380      
+##  Mean   : 9812   eurico  :3070   Mean   :1.32e+09     Mean   :500656      
+##  3rd Qu.:14717   jeremy  :3402   3rd Qu.:1.32e+09     3rd Qu.:751891      
+##  Max.   :19622   pedro   :2610   Max.   :1.32e+09     Max.   :998801      
+##                                                                           
+##           cvtd_timestamp  new_window    num_window    roll_belt    
+##  28/11/2011 14:14: 1498   no :19216   Min.   :  1   Min.   :-28.9  
+##  05/12/2011 11:24: 1497   yes:  406   1st Qu.:222   1st Qu.:  1.1  
+##  30/11/2011 17:11: 1440               Median :424   Median :113.0  
+##  05/12/2011 11:25: 1425               Mean   :431   Mean   : 64.4  
+##  02/12/2011 14:57: 1380               3rd Qu.:644   3rd Qu.:123.0  
+##  02/12/2011 13:34: 1375               Max.   :864   Max.   :162.0  
+##  (Other)         :11007                                            
+##    pitch_belt        yaw_belt      total_accel_belt kurtosis_roll_belt
+##  Min.   :-55.80   Min.   :-180.0   Min.   : 0.0              :19216   
+##  1st Qu.:  1.76   1st Qu.: -88.3   1st Qu.: 3.0     #DIV/0!  :   10   
+##  Median :  5.28   Median : -13.0   Median :17.0     -1.908453:    2   
+##  Mean   :  0.31   Mean   : -11.2   Mean   :11.3     -0.016850:    1   
+##  3rd Qu.: 14.90   3rd Qu.:  12.9   3rd Qu.:18.0     -0.021024:    1   
+##  Max.   : 60.30   Max.   : 179.0   Max.   :29.0     -0.025513:    1   
+##                                                     (Other)  :  391   
+##  kurtosis_picth_belt kurtosis_yaw_belt skewness_roll_belt
+##           :19216            :19216              :19216   
+##  #DIV/0!  :   32     #DIV/0!:  406     #DIV/0!  :    9   
+##  47.000000:    4                       0.000000 :    4   
+##  -0.150950:    3                       0.422463 :    2   
+##  -0.684748:    3                       -0.003095:    1   
+##  -1.750749:    3                       -0.010002:    1   
+##  (Other)  :  361                       (Other)  :  389   
+##  skewness_roll_belt.1 skewness_yaw_belt max_roll_belt   max_picth_belt 
+##           :19216             :19216     Min.   :-94     Min.   : 3     
+##  #DIV/0!  :   32      #DIV/0!:  406     1st Qu.:-88     1st Qu.: 5     
+##  0.000000 :    4                        Median : -5     Median :18     
+##  -2.156553:    3                        Mean   : -7     Mean   :13     
+##  -3.072669:    3                        3rd Qu.: 18     3rd Qu.:19     
+##  -6.324555:    3                        Max.   :180     Max.   :30     
+##  (Other)  :  361                        NA&#39;s   :19216   NA&#39;s   :19216  
+##   max_yaw_belt   min_roll_belt   min_pitch_belt   min_yaw_belt  
+##         :19216   Min.   :-180    Min.   : 0             :19216  
+##  -1.1   :   30   1st Qu.: -88    1st Qu.: 3      -1.1   :   30  
+##  -1.4   :   29   Median :  -8    Median :16      -1.4   :   29  
+##  -1.2   :   26   Mean   : -10    Mean   :11      -1.2   :   26  
+##  -0.9   :   24   3rd Qu.:   9    3rd Qu.:17      -0.9   :   24  
+##  -1.3   :   22   Max.   : 173    Max.   :23      -1.3   :   22  
+##  (Other):  275   NA&#39;s   :19216   NA&#39;s   :19216   (Other):  275  
+##  amplitude_roll_belt amplitude_pitch_belt amplitude_yaw_belt
+##  Min.   :  0         Min.   : 0                  :19216     
+##  1st Qu.:  0         1st Qu.: 1           #DIV/0!:   10     
+##  Median :  1         Median : 1           0.00   :   12     
+##  Mean   :  4         Mean   : 2           0.0000 :  384     
+##  3rd Qu.:  2         3rd Qu.: 2                             
+##  Max.   :360         Max.   :12                             
+##  NA&#39;s   :19216       NA&#39;s   :19216                          
+##  var_total_accel_belt avg_roll_belt   stddev_roll_belt var_roll_belt  
+##  Min.   : 0           Min.   :-27     Min.   : 0       Min.   :  0    
+##  1st Qu.: 0           1st Qu.:  1     1st Qu.: 0       1st Qu.:  0    
+##  Median : 0           Median :116     Median : 0       Median :  0    
+##  Mean   : 1           Mean   : 68     Mean   : 1       Mean   :  8    
+##  3rd Qu.: 0           3rd Qu.:123     3rd Qu.: 1       3rd Qu.:  0    
+##  Max.   :16           Max.   :157     Max.   :14       Max.   :201    
+##  NA&#39;s   :19216        NA&#39;s   :19216   NA&#39;s   :19216    NA&#39;s   :19216  
+##  avg_pitch_belt  stddev_pitch_belt var_pitch_belt   avg_yaw_belt  
+##  Min.   :-51     Min.   :0         Min.   : 0      Min.   :-138   
+##  1st Qu.:  2     1st Qu.:0         1st Qu.: 0      1st Qu.: -88   
+##  Median :  5     Median :0         Median : 0      Median :  -7   
+##  Mean   :  1     Mean   :1         Mean   : 1      Mean   :  -9   
+##  3rd Qu.: 16     3rd Qu.:1         3rd Qu.: 0      3rd Qu.:  14   
+##  Max.   : 60     Max.   :4         Max.   :16      Max.   : 174   
+##  NA&#39;s   :19216   NA&#39;s   :19216     NA&#39;s   :19216   NA&#39;s   :19216  
+##  stddev_yaw_belt  var_yaw_belt    gyros_belt_x      gyros_belt_y    
+##  Min.   :  0     Min.   :    0   Min.   :-1.0400   Min.   :-0.6400  
+##  1st Qu.:  0     1st Qu.:    0   1st Qu.:-0.0300   1st Qu.: 0.0000  
+##  Median :  0     Median :    0   Median : 0.0300   Median : 0.0200  
+##  Mean   :  1     Mean   :  107   Mean   :-0.0056   Mean   : 0.0396  
+##  3rd Qu.:  1     3rd Qu.:    0   3rd Qu.: 0.1100   3rd Qu.: 0.1100  
+##  Max.   :177     Max.   :31183   Max.   : 2.2200   Max.   : 0.6400  
+##  NA&#39;s   :19216   NA&#39;s   :19216                                      
+##   gyros_belt_z     accel_belt_x      accel_belt_y    accel_belt_z   
+##  Min.   :-1.460   Min.   :-120.00   Min.   :-69.0   Min.   :-275.0  
+##  1st Qu.:-0.200   1st Qu.: -21.00   1st Qu.:  3.0   1st Qu.:-162.0  
+##  Median :-0.100   Median : -15.00   Median : 35.0   Median :-152.0  
+##  Mean   :-0.130   Mean   :  -5.59   Mean   : 30.1   Mean   : -72.6  
+##  3rd Qu.:-0.020   3rd Qu.:  -5.00   3rd Qu.: 61.0   3rd Qu.:  27.0  
+##  Max.   : 1.620   Max.   :  85.00   Max.   :164.0   Max.   : 105.0  
+##                                                                     
+##  magnet_belt_x   magnet_belt_y magnet_belt_z     roll_arm     
+##  Min.   :-52.0   Min.   :354   Min.   :-623   Min.   :-180.0  
+##  1st Qu.:  9.0   1st Qu.:581   1st Qu.:-375   1st Qu.: -31.8  
+##  Median : 35.0   Median :601   Median :-320   Median :   0.0  
+##  Mean   : 55.6   Mean   :594   Mean   :-346   Mean   :  17.8  
+##  3rd Qu.: 59.0   3rd Qu.:610   3rd Qu.:-306   3rd Qu.:  77.3  
+##  Max.   :485.0   Max.   :673   Max.   : 293   Max.   : 180.0  
+##                                                               
+##    pitch_arm         yaw_arm        total_accel_arm var_accel_arm  
+##  Min.   :-88.80   Min.   :-180.00   Min.   : 1.0    Min.   :  0    
+##  1st Qu.:-25.90   1st Qu.: -43.10   1st Qu.:17.0    1st Qu.:  9    
+##  Median :  0.00   Median :   0.00   Median :27.0    Median : 41    
+##  Mean   : -4.61   Mean   :  -0.62   Mean   :25.5    Mean   : 53    
+##  3rd Qu.: 11.20   3rd Qu.:  45.88   3rd Qu.:33.0    3rd Qu.: 76    
+##  Max.   : 88.50   Max.   : 180.00   Max.   :66.0    Max.   :332    
+##                                                     NA&#39;s   :19216  
+##   avg_roll_arm   stddev_roll_arm  var_roll_arm   avg_pitch_arm  
+##  Min.   :-167    Min.   :  0     Min.   :    0   Min.   :-82    
+##  1st Qu.: -38    1st Qu.:  1     1st Qu.:    2   1st Qu.:-23    
+##  Median :   0    Median :  6     Median :   33   Median :  0    
+##  Mean   :  13    Mean   : 11     Mean   :  417   Mean   : -5    
+##  3rd Qu.:  76    3rd Qu.: 15     3rd Qu.:  223   3rd Qu.:  8    
+##  Max.   : 163    Max.   :162     Max.   :26232   Max.   : 76    
+##  NA&#39;s   :19216   NA&#39;s   :19216   NA&#39;s   :19216   NA&#39;s   :19216  
+##  stddev_pitch_arm var_pitch_arm    avg_yaw_arm    stddev_yaw_arm 
+##  Min.   : 0       Min.   :   0    Min.   :-173    Min.   :  0    
+##  1st Qu.: 2       1st Qu.:   3    1st Qu.: -29    1st Qu.:  3    
+##  Median : 8       Median :  66    Median :   0    Median : 17    
+##  Mean   :10       Mean   : 196    Mean   :   2    Mean   : 22    
+##  3rd Qu.:16       3rd Qu.: 267    3rd Qu.:  38    3rd Qu.: 36    
+##  Max.   :43       Max.   :1885    Max.   : 152    Max.   :177    
+##  NA&#39;s   :19216    NA&#39;s   :19216   NA&#39;s   :19216   NA&#39;s   :19216  
+##   var_yaw_arm     gyros_arm_x      gyros_arm_y      gyros_arm_z   
+##  Min.   :    0   Min.   :-6.370   Min.   :-3.440   Min.   :-2.33  
+##  1st Qu.:    7   1st Qu.:-1.330   1st Qu.:-0.800   1st Qu.:-0.07  
+##  Median :  278   Median : 0.080   Median :-0.240   Median : 0.23  
+##  Mean   : 1056   Mean   : 0.043   Mean   :-0.257   Mean   : 0.27  
+##  3rd Qu.: 1295   3rd Qu.: 1.570   3rd Qu.: 0.140   3rd Qu.: 0.72  
+##  Max.   :31345   Max.   : 4.870   Max.   : 2.840   Max.   : 3.02  
+##  NA&#39;s   :19216                                                    
+##   accel_arm_x      accel_arm_y      accel_arm_z      magnet_arm_x 
+##  Min.   :-404.0   Min.   :-318.0   Min.   :-636.0   Min.   :-584  
+##  1st Qu.:-242.0   1st Qu.: -54.0   1st Qu.:-143.0   1st Qu.:-300  
+##  Median : -44.0   Median :  14.0   Median : -47.0   Median : 289  
+##  Mean   : -60.2   Mean   :  32.6   Mean   : -71.2   Mean   : 192  
+##  3rd Qu.:  84.0   3rd Qu.: 139.0   3rd Qu.:  23.0   3rd Qu.: 637  
+##  Max.   : 437.0   Max.   : 308.0   Max.   : 292.0   Max.   : 782  
+##                                                                   
+##   magnet_arm_y   magnet_arm_z  kurtosis_roll_arm kurtosis_picth_arm
+##  Min.   :-392   Min.   :-597           :19216            :19216    
+##  1st Qu.:  -9   1st Qu.: 131   #DIV/0! :   78    #DIV/0! :   80    
+##  Median : 202   Median : 444   -0.02438:    1    -0.00484:    1    
+##  Mean   : 157   Mean   : 306   -0.04190:    1    -0.01311:    1    
+##  3rd Qu.: 323   3rd Qu.: 545   -0.05051:    1    -0.02967:    1    
+##  Max.   : 583   Max.   : 694   -0.05695:    1    -0.07394:    1    
+##                                (Other) :  324    (Other) :  322    
+##  kurtosis_yaw_arm skewness_roll_arm skewness_pitch_arm skewness_yaw_arm
+##          :19216           :19216            :19216             :19216  
+##  #DIV/0! :   11   #DIV/0! :   77    #DIV/0! :   80     #DIV/0! :   11  
+##  0.55844 :    2   -0.00051:    1    -0.00184:    1     -1.62032:    2  
+##  0.65132 :    2   -0.00696:    1    -0.01185:    1     0.55053 :    2  
+##  -0.01548:    1   -0.01884:    1    -0.01247:    1     -0.00311:    1  
+##  -0.01749:    1   -0.03359:    1    -0.02063:    1     -0.00562:    1  
+##  (Other) :  389   (Other) :  325    (Other) :  322     (Other) :  389  
+##   max_roll_arm   max_picth_arm    max_yaw_arm     min_roll_arm  
+##  Min.   :-73     Min.   :-173    Min.   : 4      Min.   :-89    
+##  1st Qu.:  0     1st Qu.:  -2    1st Qu.:29      1st Qu.:-42    
+##  Median :  5     Median :  23    Median :34      Median :-22    
+##  Mean   : 11     Mean   :  36    Mean   :35      Mean   :-21    
+##  3rd Qu.: 27     3rd Qu.:  96    3rd Qu.:41      3rd Qu.:  0    
+##  Max.   : 86     Max.   : 180    Max.   :65      Max.   : 66    
+##  NA&#39;s   :19216   NA&#39;s   :19216   NA&#39;s   :19216   NA&#39;s   :19216  
+##  min_pitch_arm    min_yaw_arm    amplitude_roll_arm amplitude_pitch_arm
+##  Min.   :-180    Min.   : 1      Min.   :  0        Min.   :  0        
+##  1st Qu.: -73    1st Qu.: 8      1st Qu.:  5        1st Qu.: 10        
+##  Median : -34    Median :13      Median : 28        Median : 55        
+##  Mean   : -34    Mean   :15      Mean   : 32        Mean   : 70        
+##  3rd Qu.:   0    3rd Qu.:19      3rd Qu.: 51        3rd Qu.:115        
+##  Max.   : 152    Max.   :38      Max.   :120        Max.   :360        
+##  NA&#39;s   :19216   NA&#39;s   :19216   NA&#39;s   :19216      NA&#39;s   :19216      
+##  amplitude_yaw_arm roll_dumbbell    pitch_dumbbell    yaw_dumbbell    
+##  Min.   : 0        Min.   :-153.7   Min.   :-149.6   Min.   :-150.87  
+##  1st Qu.:13        1st Qu.: -18.5   1st Qu.: -40.9   1st Qu.: -77.64  
+##  Median :22        Median :  48.2   Median : -21.0   Median :  -3.32  
+##  Mean   :21        Mean   :  23.8   Mean   : -10.8   Mean   :   1.67  
+##  3rd Qu.:29        3rd Qu.:  67.6   3rd Qu.:  17.5   3rd Qu.:  79.64  
+##  Max.   :52        Max.   : 153.6   Max.   : 149.4   Max.   : 154.95  
+##  NA&#39;s   :19216                                                        
+##  kurtosis_roll_dumbbell kurtosis_picth_dumbbell kurtosis_yaw_dumbbell
+##         :19216                 :19216                  :19216        
+##  #DIV/0!:    5          -0.5464:    2           #DIV/0!:  406        
+##  -0.2583:    2          -0.9334:    2                                
+##  -0.3705:    2          -2.0833:    2                                
+##  -0.5855:    2          -2.0851:    2                                
+##  -2.0851:    2          -2.0889:    2                                
+##  (Other):  393          (Other):  396                                
+##  skewness_roll_dumbbell skewness_pitch_dumbbell skewness_yaw_dumbbell
+##         :19216                 :19216                  :19216        
+##  #DIV/0!:    4          -0.2328:    2           #DIV/0!:  406        
+##  -0.9324:    2          -0.3521:    2                                
+##  0.1110 :    2          -0.7036:    2                                
+##  1.0312 :    2          0.1090 :    2                                
+##  -0.0082:    1          1.0326 :    2                                
+##  (Other):  395          (Other):  396                                
+##  max_roll_dumbbell max_picth_dumbbell max_yaw_dumbbell min_roll_dumbbell
+##  Min.   :-70       Min.   :-113              :19216    Min.   :-150     
+##  1st Qu.:-27       1st Qu.: -67       -0.6   :   20    1st Qu.: -60     
+##  Median : 15       Median :  40       0.2    :   19    Median : -44     
+##  Mean   : 14       Mean   :  33       -0.8   :   18    Mean   : -41     
+##  3rd Qu.: 51       3rd Qu.: 133       -0.3   :   16    3rd Qu.: -25     
+##  Max.   :137       Max.   : 155       -0.2   :   15    Max.   :  73     
+##  NA&#39;s   :19216     NA&#39;s   :19216      (Other):  318    NA&#39;s   :19216    
+##  min_pitch_dumbbell min_yaw_dumbbell amplitude_roll_dumbbell
+##  Min.   :-147              :19216    Min.   :  0            
+##  1st Qu.: -92       -0.6   :   20    1st Qu.: 15            
+##  Median : -66       0.2    :   19    Median : 35            
+##  Mean   : -33       -0.8   :   18    Mean   : 55            
+##  3rd Qu.:  21       -0.3   :   16    3rd Qu.: 81            
+##  Max.   : 121       -0.2   :   15    Max.   :256            
+##  NA&#39;s   :19216      (Other):  318    NA&#39;s   :19216          
+##  amplitude_pitch_dumbbell amplitude_yaw_dumbbell total_accel_dumbbell
+##  Min.   :  0                     :19216          Min.   : 0.0        
+##  1st Qu.: 17              #DIV/0!:    5          1st Qu.: 4.0        
+##  Median : 42              0.00   :  401          Median :10.0        
+##  Mean   : 66                                     Mean   :13.7        
+##  3rd Qu.:100                                     3rd Qu.:19.0        
+##  Max.   :274                                     Max.   :58.0        
+##  NA&#39;s   :19216                                                       
+##  var_accel_dumbbell avg_roll_dumbbell stddev_roll_dumbbell
+##  Min.   :  0        Min.   :-129      Min.   :  0         
+##  1st Qu.:  0        1st Qu.: -12      1st Qu.:  5         
+##  Median :  1        Median :  48      Median : 12         
+##  Mean   :  4        Mean   :  24      Mean   : 21         
+##  3rd Qu.:  3        3rd Qu.:  64      3rd Qu.: 26         
+##  Max.   :230        Max.   : 126      Max.   :124         
+##  NA&#39;s   :19216      NA&#39;s   :19216     NA&#39;s   :19216       
+##  var_roll_dumbbell avg_pitch_dumbbell stddev_pitch_dumbbell
+##  Min.   :    0     Min.   :-71        Min.   : 0           
+##  1st Qu.:   22     1st Qu.:-42        1st Qu.: 3           
+##  Median :  149     Median :-20        Median : 8           
+##  Mean   : 1020     Mean   :-12        Mean   :13           
+##  3rd Qu.:  695     3rd Qu.: 13        3rd Qu.:19           
+##  Max.   :15321     Max.   : 94        Max.   :83           
+##  NA&#39;s   :19216     NA&#39;s   :19216      NA&#39;s   :19216        
+##  var_pitch_dumbbell avg_yaw_dumbbell stddev_yaw_dumbbell var_yaw_dumbbell
+##  Min.   :   0       Min.   :-118     Min.   :  0         Min.   :    0   
+##  1st Qu.:  12       1st Qu.: -77     1st Qu.:  4         1st Qu.:   15   
+##  Median :  65       Median :  -5     Median : 10         Median :  105   
+##  Mean   : 350       Mean   :   0     Mean   : 17         Mean   :  590   
+##  3rd Qu.: 370       3rd Qu.:  71     3rd Qu.: 25         3rd Qu.:  609   
+##  Max.   :6836       Max.   : 135     Max.   :107         Max.   :11468   
+##  NA&#39;s   :19216      NA&#39;s   :19216    NA&#39;s   :19216       NA&#39;s   :19216   
+##  gyros_dumbbell_x  gyros_dumbbell_y gyros_dumbbell_z accel_dumbbell_x
+##  Min.   :-204.00   Min.   :-2.10    Min.   : -2.4    Min.   :-419.0  
+##  1st Qu.:  -0.03   1st Qu.:-0.14    1st Qu.: -0.3    1st Qu.: -50.0  
+##  Median :   0.13   Median : 0.03    Median : -0.1    Median :  -8.0  
+##  Mean   :   0.16   Mean   : 0.05    Mean   : -0.1    Mean   : -28.6  
+##  3rd Qu.:   0.35   3rd Qu.: 0.21    3rd Qu.:  0.0    3rd Qu.:  11.0  
+##  Max.   :   2.22   Max.   :52.00    Max.   :317.0    Max.   : 235.0  
+##                                                                      
+##  accel_dumbbell_y accel_dumbbell_z magnet_dumbbell_x magnet_dumbbell_y
+##  Min.   :-189.0   Min.   :-334.0   Min.   :-643      Min.   :-3600    
+##  1st Qu.:  -8.0   1st Qu.:-142.0   1st Qu.:-535      1st Qu.:  231    
+##  Median :  41.5   Median :  -1.0   Median :-479      Median :  311    
+##  Mean   :  52.6   Mean   : -38.3   Mean   :-328      Mean   :  221    
+##  3rd Qu.: 111.0   3rd Qu.:  38.0   3rd Qu.:-304      3rd Qu.:  390    
+##  Max.   : 315.0   Max.   : 318.0   Max.   : 592      Max.   :  633    
+##                                                                       
+##  magnet_dumbbell_z  roll_forearm     pitch_forearm     yaw_forearm    
+##  Min.   :-262.0    Min.   :-180.00   Min.   :-72.50   Min.   :-180.0  
+##  1st Qu.: -45.0    1st Qu.:  -0.74   1st Qu.:  0.00   1st Qu.: -68.6  
+##  Median :  13.0    Median :  21.70   Median :  9.24   Median :   0.0  
+##  Mean   :  46.1    Mean   :  33.83   Mean   : 10.71   Mean   :  19.2  
+##  3rd Qu.:  95.0    3rd Qu.: 140.00   3rd Qu.: 28.40   3rd Qu.: 110.0  
+##  Max.   : 452.0    Max.   : 180.00   Max.   : 89.80   Max.   : 180.0  
+##                                                                       
+##  kurtosis_roll_forearm kurtosis_picth_forearm kurtosis_yaw_forearm
+##         :19216                :19216                 :19216       
+##  #DIV/0!:   84         #DIV/0!:   85          #DIV/0!:  406       
+##  -0.8079:    2         -0.0073:    1                              
+##  -0.9169:    2         -0.0442:    1                              
+##  -0.0227:    1         -0.0489:    1                              
+##  -0.0359:    1         -0.0523:    1                              
+##  (Other):  316         (Other):  317                              
+##  skewness_roll_forearm skewness_pitch_forearm skewness_yaw_forearm
+##         :19216                :19216                 :19216       
+##  #DIV/0!:   83         #DIV/0!:   85          #DIV/0!:  406       
+##  -0.1912:    2         0.0000 :    4                              
+##  -0.4126:    2         -0.6992:    2                              
+##  -0.0004:    1         -0.0113:    1                              
+##  -0.0013:    1         -0.0131:    1                              
+##  (Other):  317         (Other):  313                              
+##  max_roll_forearm max_picth_forearm max_yaw_forearm min_roll_forearm
+##  Min.   :-67      Min.   :-151             :19216   Min.   :-72     
+##  1st Qu.:  0      1st Qu.:   0      #DIV/0!:   84   1st Qu.: -6     
+##  Median : 27      Median : 113      -1.2   :   32   Median :  0     
+##  Mean   : 24      Mean   :  81      -1.3   :   31   Mean   :  0     
+##  3rd Qu.: 46      3rd Qu.: 175      -1.4   :   24   3rd Qu.: 12     
+##  Max.   : 90      Max.   : 180      -1.5   :   24   Max.   : 62     
+##  NA&#39;s   :19216    NA&#39;s   :19216     (Other):  211   NA&#39;s   :19216   
+##  min_pitch_forearm min_yaw_forearm amplitude_roll_forearm
+##  Min.   :-180             :19216   Min.   :  0           
+##  1st Qu.:-175      #DIV/0!:   84   1st Qu.:  1           
+##  Median : -61      -1.2   :   32   Median : 18           
+##  Mean   : -58      -1.3   :   31   Mean   : 25           
+##  3rd Qu.:   0      -1.4   :   24   3rd Qu.: 40           
+##  Max.   : 167      -1.5   :   24   Max.   :126           
+##  NA&#39;s   :19216     (Other):  211   NA&#39;s   :19216         
+##  amplitude_pitch_forearm amplitude_yaw_forearm total_accel_forearm
+##  Min.   :  0                    :19216         Min.   :  0.0      
+##  1st Qu.:  2             #DIV/0!:   84         1st Qu.: 29.0      
+##  Median : 84             0.00   :  322         Median : 36.0      
+##  Mean   :139                                   Mean   : 34.7      
+##  3rd Qu.:350                                   3rd Qu.: 41.0      
+##  Max.   :360                                   Max.   :108.0      
+##  NA&#39;s   :19216                                                    
+##  var_accel_forearm avg_roll_forearm stddev_roll_forearm var_roll_forearm
+##  Min.   :  0       Min.   :-177     Min.   :  0         Min.   :    0   
+##  1st Qu.:  7       1st Qu.:  -1     1st Qu.:  0         1st Qu.:    0   
+##  Median : 21       Median :  11     Median :  8         Median :   64   
+##  Mean   : 34       Mean   :  33     Mean   : 42         Mean   : 5274   
+##  3rd Qu.: 51       3rd Qu.: 107     3rd Qu.: 85         3rd Qu.: 7289   
+##  Max.   :173       Max.   : 177     Max.   :179         Max.   :32102   
+##  NA&#39;s   :19216     NA&#39;s   :19216    NA&#39;s   :19216       NA&#39;s   :19216   
+##  avg_pitch_forearm stddev_pitch_forearm var_pitch_forearm avg_yaw_forearm
+##  Min.   :-68       Min.   : 0           Min.   :   0      Min.   :-155   
+##  1st Qu.:  0       1st Qu.: 0           1st Qu.:   0      1st Qu.: -26   
+##  Median : 12       Median : 6           Median :  30      Median :   0   
+##  Mean   : 12       Mean   : 8           Mean   : 140      Mean   :  18   
+##  3rd Qu.: 28       3rd Qu.:13           3rd Qu.: 166      3rd Qu.:  86   
+##  Max.   : 72       Max.   :48           Max.   :2280      Max.   : 169   
+##  NA&#39;s   :19216     NA&#39;s   :19216        NA&#39;s   :19216     NA&#39;s   :19216  
+##  stddev_yaw_forearm var_yaw_forearm gyros_forearm_x   gyros_forearm_y 
+##  Min.   :  0        Min.   :    0   Min.   :-22.000   Min.   : -7.02  
+##  1st Qu.:  1        1st Qu.:    0   1st Qu.: -0.220   1st Qu.: -1.46  
+##  Median : 25        Median :  612   Median :  0.050   Median :  0.03  
+##  Mean   : 45        Mean   : 4640   Mean   :  0.158   Mean   :  0.08  
+##  3rd Qu.: 86        3rd Qu.: 7368   3rd Qu.:  0.560   3rd Qu.:  1.62  
+##  Max.   :198        Max.   :39009   Max.   :  3.970   Max.   :311.00  
+##  NA&#39;s   :19216      NA&#39;s   :19216                                     
+##  gyros_forearm_z  accel_forearm_x  accel_forearm_y accel_forearm_z 
+##  Min.   : -8.09   Min.   :-498.0   Min.   :-632    Min.   :-446.0  
+##  1st Qu.: -0.18   1st Qu.:-178.0   1st Qu.:  57    1st Qu.:-182.0  
+##  Median :  0.08   Median : -57.0   Median : 201    Median : -39.0  
+##  Mean   :  0.15   Mean   : -61.7   Mean   : 164    Mean   : -55.3  
+##  3rd Qu.:  0.49   3rd Qu.:  76.0   3rd Qu.: 312    3rd Qu.:  26.0  
+##  Max.   :231.00   Max.   : 477.0   Max.   : 923    Max.   : 291.0  
+##                                                                    
+##  magnet_forearm_x magnet_forearm_y magnet_forearm_z classe  
+##  Min.   :-1280    Min.   :-896     Min.   :-973     A:5580  
+##  1st Qu.: -616    1st Qu.:   2     1st Qu.: 191     B:3797  
+##  Median : -378    Median : 591     Median : 511     C:3422  
+##  Mean   : -313    Mean   : 380     Mean   : 394     D:3216  
+##  3rd Qu.:  -73    3rd Qu.: 737     3rd Qu.: 653     E:3607  
+##  Max.   :  672    Max.   :1480     Max.   :1090             
+## 
+</code></pre>
+
+<pre><code class="r">summary(testing)
+</code></pre>
+
+<pre><code>##        X            user_name raw_timestamp_part_1 raw_timestamp_part_2
+##  Min.   : 1.00   adelmo  :1   Min.   :1.32e+09     Min.   : 36553      
+##  1st Qu.: 5.75   carlitos:3   1st Qu.:1.32e+09     1st Qu.:268655      
+##  Median :10.50   charles :1   Median :1.32e+09     Median :530706      
+##  Mean   :10.50   eurico  :4   Mean   :1.32e+09     Mean   :512167      
+##  3rd Qu.:15.25   jeremy  :8   3rd Qu.:1.32e+09     3rd Qu.:787738      
+##  Max.   :20.00   pedro   :3   Max.   :1.32e+09     Max.   :920315      
+##                                                                        
+##           cvtd_timestamp new_window   num_window    roll_belt     
+##  30/11/2011 17:11:4      no:20      Min.   : 48   Min.   : -5.92  
+##  05/12/2011 11:24:3                 1st Qu.:250   1st Qu.:  0.91  
+##  30/11/2011 17:12:3                 Median :384   Median :  1.11  
+##  05/12/2011 14:23:2                 Mean   :380   Mean   : 31.31  
+##  28/11/2011 14:14:2                 3rd Qu.:467   3rd Qu.: 32.51  
+##  02/12/2011 13:33:1                 Max.   :859   Max.   :129.00  
+##  (Other)         :5                                               
+##    pitch_belt        yaw_belt     total_accel_belt kurtosis_roll_belt
+##  Min.   :-41.60   Min.   :-93.7   Min.   : 2.00    Mode:logical      
+##  1st Qu.:  3.01   1st Qu.:-88.6   1st Qu.: 3.00    NA&#39;s:20           
+##  Median :  4.66   Median :-87.8   Median : 4.00                      
+##  Mean   :  5.82   Mean   :-59.3   Mean   : 7.55                      
+##  3rd Qu.:  6.13   3rd Qu.:-63.5   3rd Qu.: 8.00                      
+##  Max.   : 27.80   Max.   :162.0   Max.   :21.00                      
+##                                                                      
+##  kurtosis_picth_belt kurtosis_yaw_belt skewness_roll_belt
+##  Mode:logical        Mode:logical      Mode:logical      
+##  NA&#39;s:20             NA&#39;s:20           NA&#39;s:20           
+##                                                          
+##                                                          
+##                                                          
+##                                                          
+##                                                          
+##  skewness_roll_belt.1 skewness_yaw_belt max_roll_belt  max_picth_belt
+##  Mode:logical         Mode:logical      Mode:logical   Mode:logical  
+##  NA&#39;s:20              NA&#39;s:20           NA&#39;s:20        NA&#39;s:20       
+##                                                                      
+##                                                                      
+##                                                                      
+##                                                                      
+##                                                                      
+##  max_yaw_belt   min_roll_belt  min_pitch_belt min_yaw_belt  
+##  Mode:logical   Mode:logical   Mode:logical   Mode:logical  
+##  NA&#39;s:20        NA&#39;s:20        NA&#39;s:20        NA&#39;s:20       
+##                                                             
+##                                                             
+##                                                             
+##                                                             
+##                                                             
+##  amplitude_roll_belt amplitude_pitch_belt amplitude_yaw_belt
+##  Mode:logical        Mode:logical         Mode:logical      
+##  NA&#39;s:20             NA&#39;s:20              NA&#39;s:20           
+##                                                             
+##                                                             
+##                                                             
+##                                                             
+##                                                             
+##  var_total_accel_belt avg_roll_belt  stddev_roll_belt var_roll_belt 
+##  Mode:logical         Mode:logical   Mode:logical     Mode:logical  
+##  NA&#39;s:20              NA&#39;s:20        NA&#39;s:20          NA&#39;s:20       
+##                                                                     
+##                                                                     
+##                                                                     
+##                                                                     
+##                                                                     
+##  avg_pitch_belt stddev_pitch_belt var_pitch_belt avg_yaw_belt  
+##  Mode:logical   Mode:logical      Mode:logical   Mode:logical  
+##  NA&#39;s:20        NA&#39;s:20           NA&#39;s:20        NA&#39;s:20       
+##                                                                
+##                                                                
+##                                                                
+##                                                                
+##                                                                
+##  stddev_yaw_belt var_yaw_belt    gyros_belt_x     gyros_belt_y   
+##  Mode:logical    Mode:logical   Min.   :-0.500   Min.   :-0.050  
+##  NA&#39;s:20         NA&#39;s:20        1st Qu.:-0.070   1st Qu.:-0.005  
+##                                 Median : 0.020   Median : 0.000  
+##                                 Mean   :-0.045   Mean   : 0.010  
+##                                 3rd Qu.: 0.070   3rd Qu.: 0.020  
+##                                 Max.   : 0.240   Max.   : 0.110  
+##                                                                  
+##   gyros_belt_z     accel_belt_x     accel_belt_y    accel_belt_z   
+##  Min.   :-0.480   Min.   :-48.00   Min.   :-16.0   Min.   :-187.0  
+##  1st Qu.:-0.138   1st Qu.:-19.00   1st Qu.:  2.0   1st Qu.: -24.0  
+##  Median :-0.025   Median :-13.00   Median :  4.5   Median :  27.0  
+##  Mean   :-0.101   Mean   :-13.50   Mean   : 18.4   Mean   : -17.6  
+##  3rd Qu.: 0.000   3rd Qu.: -8.75   3rd Qu.: 25.5   3rd Qu.:  38.2  
+##  Max.   : 0.050   Max.   : 46.00   Max.   : 72.0   Max.   :  49.0  
+##                                                                    
+##  magnet_belt_x   magnet_belt_y magnet_belt_z     roll_arm     
+##  Min.   :-13.0   Min.   :566   Min.   :-426   Min.   :-137.0  
+##  1st Qu.:  5.5   1st Qu.:578   1st Qu.:-398   1st Qu.:   0.0  
+##  Median : 33.5   Median :600   Median :-314   Median :   0.0  
+##  Mean   : 35.1   Mean   :602   Mean   :-347   Mean   :  16.4  
+##  3rd Qu.: 46.2   3rd Qu.:631   3rd Qu.:-305   3rd Qu.:  71.5  
+##  Max.   :169.0   Max.   :638   Max.   :-291   Max.   : 152.0  
+##                                                               
+##    pitch_arm         yaw_arm       total_accel_arm var_accel_arm 
+##  Min.   :-63.80   Min.   :-167.0   Min.   : 3.0    Mode:logical  
+##  1st Qu.: -9.19   1st Qu.: -60.1   1st Qu.:20.2    NA&#39;s:20       
+##  Median :  0.00   Median :   0.0   Median :29.5                  
+##  Mean   : -3.95   Mean   :  -2.8   Mean   :26.4                  
+##  3rd Qu.:  3.46   3rd Qu.:  25.5   3rd Qu.:33.2                  
+##  Max.   : 55.00   Max.   : 178.0   Max.   :44.0                  
+##                                                                  
+##  avg_roll_arm   stddev_roll_arm var_roll_arm   avg_pitch_arm 
+##  Mode:logical   Mode:logical    Mode:logical   Mode:logical  
+##  NA&#39;s:20        NA&#39;s:20         NA&#39;s:20        NA&#39;s:20       
+##                                                              
+##                                                              
+##                                                              
+##                                                              
+##                                                              
+##  stddev_pitch_arm var_pitch_arm  avg_yaw_arm    stddev_yaw_arm
+##  Mode:logical     Mode:logical   Mode:logical   Mode:logical  
+##  NA&#39;s:20          NA&#39;s:20        NA&#39;s:20        NA&#39;s:20       
+##                                                               
+##                                                               
+##                                                               
+##                                                               
+##                                                               
+##  var_yaw_arm     gyros_arm_x      gyros_arm_y      gyros_arm_z    
+##  Mode:logical   Min.   :-3.710   Min.   :-2.090   Min.   :-0.690  
+##  NA&#39;s:20        1st Qu.:-0.645   1st Qu.:-0.635   1st Qu.:-0.180  
+##                 Median : 0.020   Median :-0.040   Median :-0.025  
+##                 Mean   : 0.077   Mean   :-0.160   Mean   : 0.120  
+##                 3rd Qu.: 1.248   3rd Qu.: 0.217   3rd Qu.: 0.565  
+##                 Max.   : 3.660   Max.   : 1.850   Max.   : 1.130  
+##                                                                   
+##   accel_arm_x      accel_arm_y     accel_arm_z      magnet_arm_x 
+##  Min.   :-341.0   Min.   :-65.0   Min.   :-404.0   Min.   :-428  
+##  1st Qu.:-277.0   1st Qu.: 52.2   1st Qu.:-128.5   1st Qu.:-374  
+##  Median :-194.5   Median :112.0   Median : -83.5   Median :-265  
+##  Mean   :-134.6   Mean   :103.1   Mean   : -87.8   Mean   : -39  
+##  3rd Qu.:   5.5   3rd Qu.:168.2   3rd Qu.: -27.2   3rd Qu.: 250  
+##  Max.   : 106.0   Max.   :245.0   Max.   :  93.0   Max.   : 750  
+##                                                                  
+##   magnet_arm_y   magnet_arm_z  kurtosis_roll_arm kurtosis_picth_arm
+##  Min.   :-307   Min.   :-499   Mode:logical      Mode:logical      
+##  1st Qu.: 205   1st Qu.: 403   NA&#39;s:20           NA&#39;s:20           
+##  Median : 291   Median : 476                                       
+##  Mean   : 239   Mean   : 370                                       
+##  3rd Qu.: 359   3rd Qu.: 517                                       
+##  Max.   : 474   Max.   : 633                                       
+##                                                                    
+##  kurtosis_yaw_arm skewness_roll_arm skewness_pitch_arm skewness_yaw_arm
+##  Mode:logical     Mode:logical      Mode:logical       Mode:logical    
+##  NA&#39;s:20          NA&#39;s:20           NA&#39;s:20            NA&#39;s:20         
+##                                                                        
+##                                                                        
+##                                                                        
+##                                                                        
+##                                                                        
+##  max_roll_arm   max_picth_arm  max_yaw_arm    min_roll_arm  
+##  Mode:logical   Mode:logical   Mode:logical   Mode:logical  
+##  NA&#39;s:20        NA&#39;s:20        NA&#39;s:20        NA&#39;s:20       
+##                                                             
+##                                                             
+##                                                             
+##                                                             
+##                                                             
+##  min_pitch_arm  min_yaw_arm    amplitude_roll_arm amplitude_pitch_arm
+##  Mode:logical   Mode:logical   Mode:logical       Mode:logical       
+##  NA&#39;s:20        NA&#39;s:20        NA&#39;s:20            NA&#39;s:20            
+##                                                                      
+##                                                                      
+##                                                                      
+##                                                                      
+##                                                                      
+##  amplitude_yaw_arm roll_dumbbell     pitch_dumbbell   yaw_dumbbell    
+##  Mode:logical      Min.   :-111.12   Min.   :-55.0   Min.   :-103.32  
+##  NA&#39;s:20           1st Qu.:   7.49   1st Qu.:-51.9   1st Qu.: -75.28  
+##                    Median :  50.40   Median :-40.8   Median :  -8.29  
+##                    Mean   :  33.76   Mean   :-19.5   Mean   :  -0.94  
+##                    3rd Qu.:  58.13   3rd Qu.: 16.1   3rd Qu.:  55.83  
+##                    Max.   : 123.98   Max.   : 96.9   Max.   : 132.23  
+##                                                                       
+##  kurtosis_roll_dumbbell kurtosis_picth_dumbbell kurtosis_yaw_dumbbell
+##  Mode:logical           Mode:logical            Mode:logical         
+##  NA&#39;s:20                NA&#39;s:20                 NA&#39;s:20              
+##                                                                      
+##                                                                      
+##                                                                      
+##                                                                      
+##                                                                      
+##  skewness_roll_dumbbell skewness_pitch_dumbbell skewness_yaw_dumbbell
+##  Mode:logical           Mode:logical            Mode:logical         
+##  NA&#39;s:20                NA&#39;s:20                 NA&#39;s:20              
+##                                                                      
+##                                                                      
+##                                                                      
+##                                                                      
+##                                                                      
+##  max_roll_dumbbell max_picth_dumbbell max_yaw_dumbbell min_roll_dumbbell
+##  Mode:logical      Mode:logical       Mode:logical     Mode:logical     
+##  NA&#39;s:20           NA&#39;s:20            NA&#39;s:20          NA&#39;s:20          
+##                                                                         
+##                                                                         
+##                                                                         
+##                                                                         
+##                                                                         
+##  min_pitch_dumbbell min_yaw_dumbbell amplitude_roll_dumbbell
+##  Mode:logical       Mode:logical     Mode:logical           
+##  NA&#39;s:20            NA&#39;s:20          NA&#39;s:20                
+##                                                             
+##                                                             
+##                                                             
+##                                                             
+##                                                             
+##  amplitude_pitch_dumbbell amplitude_yaw_dumbbell total_accel_dumbbell
+##  Mode:logical             Mode:logical           Min.   : 1.0        
+##  NA&#39;s:20                  NA&#39;s:20                1st Qu.: 7.0        
+##                                                  Median :15.5        
+##                                                  Mean   :17.2        
+##                                                  3rd Qu.:29.0        
+##                                                  Max.   :31.0        
+##                                                                      
+##  var_accel_dumbbell avg_roll_dumbbell stddev_roll_dumbbell
+##  Mode:logical       Mode:logical      Mode:logical        
+##  NA&#39;s:20            NA&#39;s:20           NA&#39;s:20             
+##                                                           
+##                                                           
+##                                                           
+##                                                           
+##                                                           
+##  var_roll_dumbbell avg_pitch_dumbbell stddev_pitch_dumbbell
+##  Mode:logical      Mode:logical       Mode:logical         
+##  NA&#39;s:20           NA&#39;s:20            NA&#39;s:20              
+##                                                            
+##                                                            
+##                                                            
+##                                                            
+##                                                            
+##  var_pitch_dumbbell avg_yaw_dumbbell stddev_yaw_dumbbell var_yaw_dumbbell
+##  Mode:logical       Mode:logical     Mode:logical        Mode:logical    
+##  NA&#39;s:20            NA&#39;s:20          NA&#39;s:20             NA&#39;s:20         
+##                                                                          
+##                                                                          
+##                                                                          
+##                                                                          
+##                                                                          
+##  gyros_dumbbell_x gyros_dumbbell_y  gyros_dumbbell_z accel_dumbbell_x
+##  Min.   :-1.030   Min.   :-1.1100   Min.   :-1.180   Min.   :-159.0  
+##  1st Qu.: 0.160   1st Qu.:-0.2100   1st Qu.:-0.485   1st Qu.:-140.2  
+##  Median : 0.360   Median : 0.0150   Median :-0.280   Median : -19.0  
+##  Mean   : 0.269   Mean   : 0.0605   Mean   :-0.266   Mean   : -47.6  
+##  3rd Qu.: 0.463   3rd Qu.: 0.1450   3rd Qu.:-0.165   3rd Qu.:  15.8  
+##  Max.   : 1.060   Max.   : 1.9100   Max.   : 1.100   Max.   : 185.0  
+##                                                                      
+##  accel_dumbbell_y accel_dumbbell_z magnet_dumbbell_x magnet_dumbbell_y
+##  Min.   :-30.00   Min.   :-221.0   Min.   :-576      Min.   :-558     
+##  1st Qu.:  5.75   1st Qu.:-192.2   1st Qu.:-528      1st Qu.: 260     
+##  Median : 71.50   Median :  -3.0   Median :-508      Median : 316     
+##  Mean   : 70.55   Mean   : -60.0   Mean   :-304      Mean   : 189     
+##  3rd Qu.:151.25   3rd Qu.:  76.5   3rd Qu.:-317      3rd Qu.: 348     
+##  Max.   :166.00   Max.   : 100.0   Max.   : 523      Max.   : 403     
+##                                                                       
+##  magnet_dumbbell_z  roll_forearm    pitch_forearm     yaw_forearm     
+##  Min.   :-164.0    Min.   :-176.0   Min.   :-63.50   Min.   :-168.00  
+##  1st Qu.: -33.0    1st Qu.: -40.2   1st Qu.:-11.46   1st Qu.: -93.38  
+##  Median :  49.5    Median :  94.2   Median :  8.83   Median : -19.25  
+##  Mean   :  71.4    Mean   :  38.7   Mean   :  7.10   Mean   :   2.19  
+##  3rd Qu.:  96.2    3rd Qu.: 143.2   3rd Qu.: 28.50   3rd Qu.: 104.50  
+##  Max.   : 368.0    Max.   : 176.0   Max.   : 59.30   Max.   : 159.00  
+##                                                                       
+##  kurtosis_roll_forearm kurtosis_picth_forearm kurtosis_yaw_forearm
+##  Mode:logical          Mode:logical           Mode:logical        
+##  NA&#39;s:20               NA&#39;s:20                NA&#39;s:20             
+##                                                                   
+##                                                                   
+##                                                                   
+##                                                                   
+##                                                                   
+##  skewness_roll_forearm skewness_pitch_forearm skewness_yaw_forearm
+##  Mode:logical          Mode:logical           Mode:logical        
+##  NA&#39;s:20               NA&#39;s:20                NA&#39;s:20             
+##                                                                   
+##                                                                   
+##                                                                   
+##                                                                   
+##                                                                   
+##  max_roll_forearm max_picth_forearm max_yaw_forearm min_roll_forearm
+##  Mode:logical     Mode:logical      Mode:logical    Mode:logical    
+##  NA&#39;s:20          NA&#39;s:20           NA&#39;s:20         NA&#39;s:20         
+##                                                                     
+##                                                                     
+##                                                                     
+##                                                                     
+##                                                                     
+##  min_pitch_forearm min_yaw_forearm amplitude_roll_forearm
+##  Mode:logical      Mode:logical    Mode:logical          
+##  NA&#39;s:20           NA&#39;s:20         NA&#39;s:20               
+##                                                          
+##                                                          
+##                                                          
+##                                                          
+##                                                          
+##  amplitude_pitch_forearm amplitude_yaw_forearm total_accel_forearm
+##  Mode:logical            Mode:logical          Min.   :21.0       
+##  NA&#39;s:20                 NA&#39;s:20               1st Qu.:24.0       
+##                                                Median :32.5       
+##                                                Mean   :32.0       
+##                                                3rd Qu.:36.8       
+##                                                Max.   :47.0       
+##                                                                   
+##  var_accel_forearm avg_roll_forearm stddev_roll_forearm var_roll_forearm
+##  Mode:logical      Mode:logical     Mode:logical        Mode:logical    
+##  NA&#39;s:20           NA&#39;s:20          NA&#39;s:20             NA&#39;s:20         
+##                                                                         
+##                                                                         
+##                                                                         
+##                                                                         
+##                                                                         
+##  avg_pitch_forearm stddev_pitch_forearm var_pitch_forearm avg_yaw_forearm
+##  Mode:logical      Mode:logical         Mode:logical      Mode:logical   
+##  NA&#39;s:20           NA&#39;s:20              NA&#39;s:20           NA&#39;s:20        
+##                                                                          
+##                                                                          
+##                                                                          
+##                                                                          
+##                                                                          
+##  stddev_yaw_forearm var_yaw_forearm gyros_forearm_x  gyros_forearm_y 
+##  Mode:logical       Mode:logical    Min.   :-1.060   Min.   :-5.970  
+##  NA&#39;s:20            NA&#39;s:20         1st Qu.:-0.585   1st Qu.:-1.288  
+##                                     Median : 0.020   Median : 0.035  
+##                                     Mean   :-0.020   Mean   :-0.042  
+##                                     3rd Qu.: 0.292   3rd Qu.: 2.047  
+##                                     Max.   : 1.380   Max.   : 4.260  
+##                                                                      
+##  gyros_forearm_z   accel_forearm_x  accel_forearm_y  accel_forearm_z 
+##  Min.   :-1.2600   Min.   :-212.0   Min.   :-331.0   Min.   :-282.0  
+##  1st Qu.:-0.0975   1st Qu.:-114.8   1st Qu.:   8.5   1st Qu.:-199.0  
+##  Median : 0.2300   Median :  86.0   Median : 138.0   Median :-148.5  
+##  Mean   : 0.2610   Mean   :  38.8   Mean   : 125.3   Mean   : -93.7  
+##  3rd Qu.: 0.7625   3rd Qu.: 166.2   3rd Qu.: 268.0   3rd Qu.: -31.0  
+##  Max.   : 1.8000   Max.   : 232.0   Max.   : 406.0   Max.   : 179.0  
+##                                                                      
+##  magnet_forearm_x magnet_forearm_y magnet_forearm_z   problem_id   
+##  Min.   :-714.0   Min.   :-787     Min.   :-32      Min.   : 1.00  
+##  1st Qu.:-427.2   1st Qu.:-329     1st Qu.:275      1st Qu.: 5.75  
+##  Median :-189.5   Median : 487     Median :492      Median :10.50  
+##  Mean   :-159.2   Mean   : 192     Mean   :460      Mean   :10.50  
+##  3rd Qu.:  41.5   3rd Qu.: 721     3rd Qu.:662      3rd Qu.:15.25  
+##  Max.   : 532.0   Max.   : 800     Max.   :884      Max.   :20.00  
+## 
+</code></pre>
+
+<h1>Data Preparation</h1>
+
+<h2>Specify column names to be used in training, and convert them to column index numbers.</h2>
+
+<pre><code class="r">column_name &lt;- c(&quot;roll_belt&quot;,&quot;pitch_belt&quot;,&quot;yaw_belt&quot;,&quot;total_accel_belt&quot;,&quot;gyros_belt_x&quot;,
+                 &quot;gyros_belt_y&quot;,&quot;gyros_belt_z&quot;,&quot;accel_belt_x&quot;,&quot;accel_belt_y&quot;,
+                 &quot;accel_belt_z&quot;,&quot;magnet_belt_x&quot;,&quot;magnet_belt_y&quot;,&quot;magnet_belt_z&quot;,
+                 &quot;roll_arm&quot;,&quot;pitch_arm&quot;,&quot;yaw_arm&quot;,&quot;total_accel_arm&quot;,&quot;gyros_arm_x&quot;,
+                 &quot;gyros_arm_y&quot;,&quot;gyros_arm_z&quot;,&quot;accel_arm_x&quot;,&quot;accel_arm_y&quot;,&quot;accel_arm_z&quot;,
+                 &quot;magnet_arm_x&quot;,&quot;magnet_arm_y&quot;,&quot;magnet_arm_z&quot;,&quot;roll_dumbbell&quot;,
+                 &quot;pitch_dumbbell&quot;,&quot;yaw_dumbbell&quot;,&quot;total_accel_dumbbell&quot;,
+                 &quot;gyros_dumbbell_x&quot;,&quot;gyros_dumbbell_y&quot;,&quot;gyros_dumbbell_z&quot;,
+                 &quot;accel_dumbbell_x&quot;,&quot;accel_dumbbell_y&quot;,&quot;accel_dumbbell_z&quot;,
+                 &quot;magnet_dumbbell_x&quot;,&quot;magnet_dumbbell_y&quot;,&quot;magnet_dumbbell_z&quot;,
+                 &quot;roll_forearm&quot;,&quot;pitch_forearm&quot;,&quot;yaw_forearm&quot;,
+                 &quot;total_accel_forearm&quot;,
+                 &quot;gyros_forearm_x&quot;,&quot;gyros_forearm_y&quot;,&quot;gyros_forearm_z&quot;,
+                 &quot;accel_forearm_x&quot;,&quot;accel_forearm_y&quot;,&quot;accel_forearm_z&quot;,
+                 &quot;magnet_forearm_x&quot;,&quot;magnet_forearm_y&quot;,&quot;magnet_forearm_z&quot;)
+
+column_id &lt;- c()
+for (i in 1:length(names(training)))
+{
+    if ( names(training)[i] %in% column_name )
+    {
+        print(names(training)[i])
+        column_id &lt;- c(column_id, i)
+    }
+}
+</code></pre>
+
+<pre><code>## [1] &quot;roll_belt&quot;
+## [1] &quot;pitch_belt&quot;
+## [1] &quot;yaw_belt&quot;
+## [1] &quot;total_accel_belt&quot;
+## [1] &quot;gyros_belt_x&quot;
+## [1] &quot;gyros_belt_y&quot;
+## [1] &quot;gyros_belt_z&quot;
+## [1] &quot;accel_belt_x&quot;
+## [1] &quot;accel_belt_y&quot;
+## [1] &quot;accel_belt_z&quot;
+## [1] &quot;magnet_belt_x&quot;
+## [1] &quot;magnet_belt_y&quot;
+## [1] &quot;magnet_belt_z&quot;
+## [1] &quot;roll_arm&quot;
+## [1] &quot;pitch_arm&quot;
+## [1] &quot;yaw_arm&quot;
+## [1] &quot;total_accel_arm&quot;
+## [1] &quot;gyros_arm_x&quot;
+## [1] &quot;gyros_arm_y&quot;
+## [1] &quot;gyros_arm_z&quot;
+## [1] &quot;accel_arm_x&quot;
+## [1] &quot;accel_arm_y&quot;
+## [1] &quot;accel_arm_z&quot;
+## [1] &quot;magnet_arm_x&quot;
+## [1] &quot;magnet_arm_y&quot;
+## [1] &quot;magnet_arm_z&quot;
+## [1] &quot;roll_dumbbell&quot;
+## [1] &quot;pitch_dumbbell&quot;
+## [1] &quot;yaw_dumbbell&quot;
+## [1] &quot;total_accel_dumbbell&quot;
+## [1] &quot;gyros_dumbbell_x&quot;
+## [1] &quot;gyros_dumbbell_y&quot;
+## [1] &quot;gyros_dumbbell_z&quot;
+## [1] &quot;accel_dumbbell_x&quot;
+## [1] &quot;accel_dumbbell_y&quot;
+## [1] &quot;accel_dumbbell_z&quot;
+## [1] &quot;magnet_dumbbell_x&quot;
+## [1] &quot;magnet_dumbbell_y&quot;
+## [1] &quot;magnet_dumbbell_z&quot;
+## [1] &quot;roll_forearm&quot;
+## [1] &quot;pitch_forearm&quot;
+## [1] &quot;yaw_forearm&quot;
+## [1] &quot;total_accel_forearm&quot;
+## [1] &quot;gyros_forearm_x&quot;
+## [1] &quot;gyros_forearm_y&quot;
+## [1] &quot;gyros_forearm_z&quot;
+## [1] &quot;accel_forearm_x&quot;
+## [1] &quot;accel_forearm_y&quot;
+## [1] &quot;accel_forearm_z&quot;
+## [1] &quot;magnet_forearm_x&quot;
+## [1] &quot;magnet_forearm_y&quot;
+## [1] &quot;magnet_forearm_z&quot;
+</code></pre>
+
+<h2>Select columns from the data frames to be used in training, and convert them to numeric.</h2>
+
+<pre><code class="r">for (i in 1:length(column_id))
+{
+    training[,column_id[i]] &lt;- as.numeric(training[,column_id[i]])
+}
+for (i in 1:length(column_id))
+{
+    testing[,column_id[i]] &lt;- as.numeric(testing[,column_id[i]])
+}
+
+tmpTrain &lt;- training[, c(column_id, 160)]
+names(tmpTrain)
+</code></pre>
+
+<pre><code>##  [1] &quot;roll_belt&quot;            &quot;pitch_belt&quot;           &quot;yaw_belt&quot;            
+##  [4] &quot;total_accel_belt&quot;     &quot;gyros_belt_x&quot;         &quot;gyros_belt_y&quot;        
+##  [7] &quot;gyros_belt_z&quot;         &quot;accel_belt_x&quot;         &quot;accel_belt_y&quot;        
+## [10] &quot;accel_belt_z&quot;         &quot;magnet_belt_x&quot;        &quot;magnet_belt_y&quot;       
+## [13] &quot;magnet_belt_z&quot;        &quot;roll_arm&quot;             &quot;pitch_arm&quot;           
+## [16] &quot;yaw_arm&quot;              &quot;total_accel_arm&quot;      &quot;gyros_arm_x&quot;         
+## [19] &quot;gyros_arm_y&quot;          &quot;gyros_arm_z&quot;          &quot;accel_arm_x&quot;         
+## [22] &quot;accel_arm_y&quot;          &quot;accel_arm_z&quot;          &quot;magnet_arm_x&quot;        
+## [25] &quot;magnet_arm_y&quot;         &quot;magnet_arm_z&quot;         &quot;roll_dumbbell&quot;       
+## [28] &quot;pitch_dumbbell&quot;       &quot;yaw_dumbbell&quot;         &quot;total_accel_dumbbell&quot;
+## [31] &quot;gyros_dumbbell_x&quot;     &quot;gyros_dumbbell_y&quot;     &quot;gyros_dumbbell_z&quot;    
+## [34] &quot;accel_dumbbell_x&quot;     &quot;accel_dumbbell_y&quot;     &quot;accel_dumbbell_z&quot;    
+## [37] &quot;magnet_dumbbell_x&quot;    &quot;magnet_dumbbell_y&quot;    &quot;magnet_dumbbell_z&quot;   
+## [40] &quot;roll_forearm&quot;         &quot;pitch_forearm&quot;        &quot;yaw_forearm&quot;         
+## [43] &quot;total_accel_forearm&quot;  &quot;gyros_forearm_x&quot;      &quot;gyros_forearm_y&quot;     
+## [46] &quot;gyros_forearm_z&quot;      &quot;accel_forearm_x&quot;      &quot;accel_forearm_y&quot;     
+## [49] &quot;accel_forearm_z&quot;      &quot;magnet_forearm_x&quot;     &quot;magnet_forearm_y&quot;    
+## [52] &quot;magnet_forearm_z&quot;     &quot;classe&quot;
+</code></pre>
+
+<pre><code class="r">summary(tmpTrain)
+</code></pre>
+
+<pre><code>##    roll_belt       pitch_belt        yaw_belt      total_accel_belt
+##  Min.   :-28.9   Min.   :-55.80   Min.   :-180.0   Min.   : 0.0    
+##  1st Qu.:  1.1   1st Qu.:  1.76   1st Qu.: -88.3   1st Qu.: 3.0    
+##  Median :113.0   Median :  5.28   Median : -13.0   Median :17.0    
+##  Mean   : 64.4   Mean   :  0.31   Mean   : -11.2   Mean   :11.3    
+##  3rd Qu.:123.0   3rd Qu.: 14.90   3rd Qu.:  12.9   3rd Qu.:18.0    
+##  Max.   :162.0   Max.   : 60.30   Max.   : 179.0   Max.   :29.0    
+##   gyros_belt_x      gyros_belt_y      gyros_belt_z     accel_belt_x    
+##  Min.   :-1.0400   Min.   :-0.6400   Min.   :-1.460   Min.   :-120.00  
+##  1st Qu.:-0.0300   1st Qu.: 0.0000   1st Qu.:-0.200   1st Qu.: -21.00  
+##  Median : 0.0300   Median : 0.0200   Median :-0.100   Median : -15.00  
+##  Mean   :-0.0056   Mean   : 0.0396   Mean   :-0.130   Mean   :  -5.59  
+##  3rd Qu.: 0.1100   3rd Qu.: 0.1100   3rd Qu.:-0.020   3rd Qu.:  -5.00  
+##  Max.   : 2.2200   Max.   : 0.6400   Max.   : 1.620   Max.   :  85.00  
+##   accel_belt_y    accel_belt_z    magnet_belt_x   magnet_belt_y
+##  Min.   :-69.0   Min.   :-275.0   Min.   :-52.0   Min.   :354  
+##  1st Qu.:  3.0   1st Qu.:-162.0   1st Qu.:  9.0   1st Qu.:581  
+##  Median : 35.0   Median :-152.0   Median : 35.0   Median :601  
+##  Mean   : 30.1   Mean   : -72.6   Mean   : 55.6   Mean   :594  
+##  3rd Qu.: 61.0   3rd Qu.:  27.0   3rd Qu.: 59.0   3rd Qu.:610  
+##  Max.   :164.0   Max.   : 105.0   Max.   :485.0   Max.   :673  
+##  magnet_belt_z     roll_arm        pitch_arm         yaw_arm       
+##  Min.   :-623   Min.   :-180.0   Min.   :-88.80   Min.   :-180.00  
+##  1st Qu.:-375   1st Qu.: -31.8   1st Qu.:-25.90   1st Qu.: -43.10  
+##  Median :-320   Median :   0.0   Median :  0.00   Median :   0.00  
+##  Mean   :-346   Mean   :  17.8   Mean   : -4.61   Mean   :  -0.62  
+##  3rd Qu.:-306   3rd Qu.:  77.3   3rd Qu.: 11.20   3rd Qu.:  45.88  
+##  Max.   : 293   Max.   : 180.0   Max.   : 88.50   Max.   : 180.00  
+##  total_accel_arm  gyros_arm_x      gyros_arm_y      gyros_arm_z   
+##  Min.   : 1.0    Min.   :-6.370   Min.   :-3.440   Min.   :-2.33  
+##  1st Qu.:17.0    1st Qu.:-1.330   1st Qu.:-0.800   1st Qu.:-0.07  
+##  Median :27.0    Median : 0.080   Median :-0.240   Median : 0.23  
+##  Mean   :25.5    Mean   : 0.043   Mean   :-0.257   Mean   : 0.27  
+##  3rd Qu.:33.0    3rd Qu.: 1.570   3rd Qu.: 0.140   3rd Qu.: 0.72  
+##  Max.   :66.0    Max.   : 4.870   Max.   : 2.840   Max.   : 3.02  
+##   accel_arm_x      accel_arm_y      accel_arm_z      magnet_arm_x 
+##  Min.   :-404.0   Min.   :-318.0   Min.   :-636.0   Min.   :-584  
+##  1st Qu.:-242.0   1st Qu.: -54.0   1st Qu.:-143.0   1st Qu.:-300  
+##  Median : -44.0   Median :  14.0   Median : -47.0   Median : 289  
+##  Mean   : -60.2   Mean   :  32.6   Mean   : -71.2   Mean   : 192  
+##  3rd Qu.:  84.0   3rd Qu.: 139.0   3rd Qu.:  23.0   3rd Qu.: 637  
+##  Max.   : 437.0   Max.   : 308.0   Max.   : 292.0   Max.   : 782  
+##   magnet_arm_y   magnet_arm_z  roll_dumbbell    pitch_dumbbell  
+##  Min.   :-392   Min.   :-597   Min.   :-153.7   Min.   :-149.6  
+##  1st Qu.:  -9   1st Qu.: 131   1st Qu.: -18.5   1st Qu.: -40.9  
+##  Median : 202   Median : 444   Median :  48.2   Median : -21.0  
+##  Mean   : 157   Mean   : 306   Mean   :  23.8   Mean   : -10.8  
+##  3rd Qu.: 323   3rd Qu.: 545   3rd Qu.:  67.6   3rd Qu.:  17.5  
+##  Max.   : 583   Max.   : 694   Max.   : 153.6   Max.   : 149.4  
+##   yaw_dumbbell     total_accel_dumbbell gyros_dumbbell_x  gyros_dumbbell_y
+##  Min.   :-150.87   Min.   : 0.0         Min.   :-204.00   Min.   :-2.10   
+##  1st Qu.: -77.64   1st Qu.: 4.0         1st Qu.:  -0.03   1st Qu.:-0.14   
+##  Median :  -3.32   Median :10.0         Median :   0.13   Median : 0.03   
+##  Mean   :   1.67   Mean   :13.7         Mean   :   0.16   Mean   : 0.05   
+##  3rd Qu.:  79.64   3rd Qu.:19.0         3rd Qu.:   0.35   3rd Qu.: 0.21   
+##  Max.   : 154.95   Max.   :58.0         Max.   :   2.22   Max.   :52.00   
+##  gyros_dumbbell_z accel_dumbbell_x accel_dumbbell_y accel_dumbbell_z
+##  Min.   : -2.4    Min.   :-419.0   Min.   :-189.0   Min.   :-334.0  
+##  1st Qu.: -0.3    1st Qu.: -50.0   1st Qu.:  -8.0   1st Qu.:-142.0  
+##  Median : -0.1    Median :  -8.0   Median :  41.5   Median :  -1.0  
+##  Mean   : -0.1    Mean   : -28.6   Mean   :  52.6   Mean   : -38.3  
+##  3rd Qu.:  0.0    3rd Qu.:  11.0   3rd Qu.: 111.0   3rd Qu.:  38.0  
+##  Max.   :317.0    Max.   : 235.0   Max.   : 315.0   Max.   : 318.0  
+##  magnet_dumbbell_x magnet_dumbbell_y magnet_dumbbell_z  roll_forearm    
+##  Min.   :-643      Min.   :-3600     Min.   :-262.0    Min.   :-180.00  
+##  1st Qu.:-535      1st Qu.:  231     1st Qu.: -45.0    1st Qu.:  -0.74  
+##  Median :-479      Median :  311     Median :  13.0    Median :  21.70  
+##  Mean   :-328      Mean   :  221     Mean   :  46.1    Mean   :  33.83  
+##  3rd Qu.:-304      3rd Qu.:  390     3rd Qu.:  95.0    3rd Qu.: 140.00  
+##  Max.   : 592      Max.   :  633     Max.   : 452.0    Max.   : 180.00  
+##  pitch_forearm     yaw_forearm     total_accel_forearm gyros_forearm_x  
+##  Min.   :-72.50   Min.   :-180.0   Min.   :  0.0       Min.   :-22.000  
+##  1st Qu.:  0.00   1st Qu.: -68.6   1st Qu.: 29.0       1st Qu.: -0.220  
+##  Median :  9.24   Median :   0.0   Median : 36.0       Median :  0.050  
+##  Mean   : 10.71   Mean   :  19.2   Mean   : 34.7       Mean   :  0.158  
+##  3rd Qu.: 28.40   3rd Qu.: 110.0   3rd Qu.: 41.0       3rd Qu.:  0.560  
+##  Max.   : 89.80   Max.   : 180.0   Max.   :108.0       Max.   :  3.970  
+##  gyros_forearm_y  gyros_forearm_z  accel_forearm_x  accel_forearm_y
+##  Min.   : -7.02   Min.   : -8.09   Min.   :-498.0   Min.   :-632   
+##  1st Qu.: -1.46   1st Qu.: -0.18   1st Qu.:-178.0   1st Qu.:  57   
+##  Median :  0.03   Median :  0.08   Median : -57.0   Median : 201   
+##  Mean   :  0.08   Mean   :  0.15   Mean   : -61.7   Mean   : 164   
+##  3rd Qu.:  1.62   3rd Qu.:  0.49   3rd Qu.:  76.0   3rd Qu.: 312   
+##  Max.   :311.00   Max.   :231.00   Max.   : 477.0   Max.   : 923   
+##  accel_forearm_z  magnet_forearm_x magnet_forearm_y magnet_forearm_z
+##  Min.   :-446.0   Min.   :-1280    Min.   :-896     Min.   :-973    
+##  1st Qu.:-182.0   1st Qu.: -616    1st Qu.:   2     1st Qu.: 191    
+##  Median : -39.0   Median : -378    Median : 591     Median : 511    
+##  Mean   : -55.3   Mean   : -313    Mean   : 380     Mean   : 394    
+##  3rd Qu.:  26.0   3rd Qu.:  -73    3rd Qu.: 737     3rd Qu.: 653    
+##  Max.   : 291.0   Max.   :  672    Max.   :1480     Max.   :1090    
+##  classe  
+##  A:5580  
+##  B:3797  
+##  C:3422  
+##  D:3216  
+##  E:3607  
+## 
+</code></pre>
+
+<pre><code class="r">tmpTest &lt;- testing[, c(column_id, 160)]
+names(tmpTest)
+</code></pre>
+
+<pre><code>##  [1] &quot;roll_belt&quot;            &quot;pitch_belt&quot;           &quot;yaw_belt&quot;            
+##  [4] &quot;total_accel_belt&quot;     &quot;gyros_belt_x&quot;         &quot;gyros_belt_y&quot;        
+##  [7] &quot;gyros_belt_z&quot;         &quot;accel_belt_x&quot;         &quot;accel_belt_y&quot;        
+## [10] &quot;accel_belt_z&quot;         &quot;magnet_belt_x&quot;        &quot;magnet_belt_y&quot;       
+## [13] &quot;magnet_belt_z&quot;        &quot;roll_arm&quot;             &quot;pitch_arm&quot;           
+## [16] &quot;yaw_arm&quot;              &quot;total_accel_arm&quot;      &quot;gyros_arm_x&quot;         
+## [19] &quot;gyros_arm_y&quot;          &quot;gyros_arm_z&quot;          &quot;accel_arm_x&quot;         
+## [22] &quot;accel_arm_y&quot;          &quot;accel_arm_z&quot;          &quot;magnet_arm_x&quot;        
+## [25] &quot;magnet_arm_y&quot;         &quot;magnet_arm_z&quot;         &quot;roll_dumbbell&quot;       
+## [28] &quot;pitch_dumbbell&quot;       &quot;yaw_dumbbell&quot;         &quot;total_accel_dumbbell&quot;
+## [31] &quot;gyros_dumbbell_x&quot;     &quot;gyros_dumbbell_y&quot;     &quot;gyros_dumbbell_z&quot;    
+## [34] &quot;accel_dumbbell_x&quot;     &quot;accel_dumbbell_y&quot;     &quot;accel_dumbbell_z&quot;    
+## [37] &quot;magnet_dumbbell_x&quot;    &quot;magnet_dumbbell_y&quot;    &quot;magnet_dumbbell_z&quot;   
+## [40] &quot;roll_forearm&quot;         &quot;pitch_forearm&quot;        &quot;yaw_forearm&quot;         
+## [43] &quot;total_accel_forearm&quot;  &quot;gyros_forearm_x&quot;      &quot;gyros_forearm_y&quot;     
+## [46] &quot;gyros_forearm_z&quot;      &quot;accel_forearm_x&quot;      &quot;accel_forearm_y&quot;     
+## [49] &quot;accel_forearm_z&quot;      &quot;magnet_forearm_x&quot;     &quot;magnet_forearm_y&quot;    
+## [52] &quot;magnet_forearm_z&quot;     &quot;problem_id&quot;
+</code></pre>
+
+<pre><code class="r">summary(tmpTest)
+</code></pre>
+
+<pre><code>##    roll_belt        pitch_belt        yaw_belt     total_accel_belt
+##  Min.   : -5.92   Min.   :-41.60   Min.   :-93.7   Min.   : 2.00   
+##  1st Qu.:  0.91   1st Qu.:  3.01   1st Qu.:-88.6   1st Qu.: 3.00   
+##  Median :  1.11   Median :  4.66   Median :-87.8   Median : 4.00   
+##  Mean   : 31.31   Mean   :  5.82   Mean   :-59.3   Mean   : 7.55   
+##  3rd Qu.: 32.51   3rd Qu.:  6.13   3rd Qu.:-63.5   3rd Qu.: 8.00   
+##  Max.   :129.00   Max.   : 27.80   Max.   :162.0   Max.   :21.00   
+##   gyros_belt_x     gyros_belt_y     gyros_belt_z     accel_belt_x   
+##  Min.   :-0.500   Min.   :-0.050   Min.   :-0.480   Min.   :-48.00  
+##  1st Qu.:-0.070   1st Qu.:-0.005   1st Qu.:-0.138   1st Qu.:-19.00  
+##  Median : 0.020   Median : 0.000   Median :-0.025   Median :-13.00  
+##  Mean   :-0.045   Mean   : 0.010   Mean   :-0.101   Mean   :-13.50  
+##  3rd Qu.: 0.070   3rd Qu.: 0.020   3rd Qu.: 0.000   3rd Qu.: -8.75  
+##  Max.   : 0.240   Max.   : 0.110   Max.   : 0.050   Max.   : 46.00  
+##   accel_belt_y    accel_belt_z    magnet_belt_x   magnet_belt_y
+##  Min.   :-16.0   Min.   :-187.0   Min.   :-13.0   Min.   :566  
+##  1st Qu.:  2.0   1st Qu.: -24.0   1st Qu.:  5.5   1st Qu.:578  
+##  Median :  4.5   Median :  27.0   Median : 33.5   Median :600  
+##  Mean   : 18.4   Mean   : -17.6   Mean   : 35.1   Mean   :602  
+##  3rd Qu.: 25.5   3rd Qu.:  38.2   3rd Qu.: 46.2   3rd Qu.:631  
+##  Max.   : 72.0   Max.   :  49.0   Max.   :169.0   Max.   :638  
+##  magnet_belt_z     roll_arm        pitch_arm         yaw_arm      
+##  Min.   :-426   Min.   :-137.0   Min.   :-63.80   Min.   :-167.0  
+##  1st Qu.:-398   1st Qu.:   0.0   1st Qu.: -9.19   1st Qu.: -60.1  
+##  Median :-314   Median :   0.0   Median :  0.00   Median :   0.0  
+##  Mean   :-347   Mean   :  16.4   Mean   : -3.95   Mean   :  -2.8  
+##  3rd Qu.:-305   3rd Qu.:  71.5   3rd Qu.:  3.46   3rd Qu.:  25.5  
+##  Max.   :-291   Max.   : 152.0   Max.   : 55.00   Max.   : 178.0  
+##  total_accel_arm  gyros_arm_x      gyros_arm_y      gyros_arm_z    
+##  Min.   : 3.0    Min.   :-3.710   Min.   :-2.090   Min.   :-0.690  
+##  1st Qu.:20.2    1st Qu.:-0.645   1st Qu.:-0.635   1st Qu.:-0.180  
+##  Median :29.5    Median : 0.020   Median :-0.040   Median :-0.025  
+##  Mean   :26.4    Mean   : 0.077   Mean   :-0.160   Mean   : 0.120  
+##  3rd Qu.:33.2    3rd Qu.: 1.248   3rd Qu.: 0.217   3rd Qu.: 0.565  
+##  Max.   :44.0    Max.   : 3.660   Max.   : 1.850   Max.   : 1.130  
+##   accel_arm_x      accel_arm_y     accel_arm_z      magnet_arm_x 
+##  Min.   :-341.0   Min.   :-65.0   Min.   :-404.0   Min.   :-428  
+##  1st Qu.:-277.0   1st Qu.: 52.2   1st Qu.:-128.5   1st Qu.:-374  
+##  Median :-194.5   Median :112.0   Median : -83.5   Median :-265  
+##  Mean   :-134.6   Mean   :103.1   Mean   : -87.8   Mean   : -39  
+##  3rd Qu.:   5.5   3rd Qu.:168.2   3rd Qu.: -27.2   3rd Qu.: 250  
+##  Max.   : 106.0   Max.   :245.0   Max.   :  93.0   Max.   : 750  
+##   magnet_arm_y   magnet_arm_z  roll_dumbbell     pitch_dumbbell 
+##  Min.   :-307   Min.   :-499   Min.   :-111.12   Min.   :-55.0  
+##  1st Qu.: 205   1st Qu.: 403   1st Qu.:   7.49   1st Qu.:-51.9  
+##  Median : 291   Median : 476   Median :  50.40   Median :-40.8  
+##  Mean   : 239   Mean   : 370   Mean   :  33.76   Mean   :-19.5  
+##  3rd Qu.: 359   3rd Qu.: 517   3rd Qu.:  58.13   3rd Qu.: 16.1  
+##  Max.   : 474   Max.   : 633   Max.   : 123.98   Max.   : 96.9  
+##   yaw_dumbbell     total_accel_dumbbell gyros_dumbbell_x gyros_dumbbell_y 
+##  Min.   :-103.32   Min.   : 1.0         Min.   :-1.030   Min.   :-1.1100  
+##  1st Qu.: -75.28   1st Qu.: 7.0         1st Qu.: 0.160   1st Qu.:-0.2100  
+##  Median :  -8.29   Median :15.5         Median : 0.360   Median : 0.0150  
+##  Mean   :  -0.94   Mean   :17.2         Mean   : 0.269   Mean   : 0.0605  
+##  3rd Qu.:  55.83   3rd Qu.:29.0         3rd Qu.: 0.463   3rd Qu.: 0.1450  
+##  Max.   : 132.23   Max.   :31.0         Max.   : 1.060   Max.   : 1.9100  
+##  gyros_dumbbell_z accel_dumbbell_x accel_dumbbell_y accel_dumbbell_z
+##  Min.   :-1.180   Min.   :-159.0   Min.   :-30.00   Min.   :-221.0  
+##  1st Qu.:-0.485   1st Qu.:-140.2   1st Qu.:  5.75   1st Qu.:-192.2  
+##  Median :-0.280   Median : -19.0   Median : 71.50   Median :  -3.0  
+##  Mean   :-0.266   Mean   : -47.6   Mean   : 70.55   Mean   : -60.0  
+##  3rd Qu.:-0.165   3rd Qu.:  15.8   3rd Qu.:151.25   3rd Qu.:  76.5  
+##  Max.   : 1.100   Max.   : 185.0   Max.   :166.00   Max.   : 100.0  
+##  magnet_dumbbell_x magnet_dumbbell_y magnet_dumbbell_z  roll_forearm   
+##  Min.   :-576      Min.   :-558      Min.   :-164.0    Min.   :-176.0  
+##  1st Qu.:-528      1st Qu.: 260      1st Qu.: -33.0    1st Qu.: -40.2  
+##  Median :-508      Median : 316      Median :  49.5    Median :  94.2  
+##  Mean   :-304      Mean   : 189      Mean   :  71.4    Mean   :  38.7  
+##  3rd Qu.:-317      3rd Qu.: 348      3rd Qu.:  96.2    3rd Qu.: 143.2  
+##  Max.   : 523      Max.   : 403      Max.   : 368.0    Max.   : 176.0  
+##  pitch_forearm     yaw_forearm      total_accel_forearm gyros_forearm_x 
+##  Min.   :-63.50   Min.   :-168.00   Min.   :21.0        Min.   :-1.060  
+##  1st Qu.:-11.46   1st Qu.: -93.38   1st Qu.:24.0        1st Qu.:-0.585  
+##  Median :  8.83   Median : -19.25   Median :32.5        Median : 0.020  
+##  Mean   :  7.10   Mean   :   2.19   Mean   :32.0        Mean   :-0.020  
+##  3rd Qu.: 28.50   3rd Qu.: 104.50   3rd Qu.:36.8        3rd Qu.: 0.292  
+##  Max.   : 59.30   Max.   : 159.00   Max.   :47.0        Max.   : 1.380  
+##  gyros_forearm_y  gyros_forearm_z   accel_forearm_x  accel_forearm_y 
+##  Min.   :-5.970   Min.   :-1.2600   Min.   :-212.0   Min.   :-331.0  
+##  1st Qu.:-1.288   1st Qu.:-0.0975   1st Qu.:-114.8   1st Qu.:   8.5  
+##  Median : 0.035   Median : 0.2300   Median :  86.0   Median : 138.0  
+##  Mean   :-0.042   Mean   : 0.2610   Mean   :  38.8   Mean   : 125.3  
+##  3rd Qu.: 2.047   3rd Qu.: 0.7625   3rd Qu.: 166.2   3rd Qu.: 268.0  
+##  Max.   : 4.260   Max.   : 1.8000   Max.   : 232.0   Max.   : 406.0  
+##  accel_forearm_z  magnet_forearm_x magnet_forearm_y magnet_forearm_z
+##  Min.   :-282.0   Min.   :-714.0   Min.   :-787     Min.   :-32     
+##  1st Qu.:-199.0   1st Qu.:-427.2   1st Qu.:-329     1st Qu.:275     
+##  Median :-148.5   Median :-189.5   Median : 487     Median :492     
+##  Mean   : -93.7   Mean   :-159.2   Mean   : 192     Mean   :460     
+##  3rd Qu.: -31.0   3rd Qu.:  41.5   3rd Qu.: 721     3rd Qu.:662     
+##  Max.   : 179.0   Max.   : 532.0   Max.   : 800     Max.   :884     
+##    problem_id   
+##  Min.   : 1.00  
+##  1st Qu.: 5.75  
+##  Median :10.50  
+##  Mean   :10.50  
+##  3rd Qu.:15.25  
+##  Max.   :20.00
+</code></pre>
+
+<h1>Building a model</h1>
+
+<h2>Building a model by Classification</h2>
+
+<pre><code class="r">modFitCT &lt;- train(classe ~ .,
+                  data = tmpTrain, method=&quot;rpart&quot;)
+</code></pre>
+
+<pre><code>## Loading required package: rpart
+</code></pre>
+
+<pre><code class="r">modFitCT$finalModel
+</code></pre>
+
+<pre><code>## n= 19622 
+## 
+## node), split, n, loss, yval, (yprob)
+##       * denotes terminal node
+## 
+##  1) root 19622 14040 A (0.28 0.19 0.17 0.16 0.18)  
+##    2) roll_belt&lt; 130.5 17977 12410 A (0.31 0.21 0.19 0.18 0.11)  
+##      4) pitch_forearm&lt; -33.95 1578    10 A (0.99 0.0063 0 0 0) *
+##      5) pitch_forearm&gt;=-33.95 16399 12400 A (0.24 0.23 0.21 0.2 0.12)  
+##       10) magnet_dumbbell_y&lt; 439.5 13870  9953 A (0.28 0.18 0.24 0.19 0.11)  
+##         20) roll_forearm&lt; 123.5 8643  5131 A (0.41 0.18 0.18 0.17 0.061) *
+##         21) roll_forearm&gt;=123.5 5227  3500 C (0.077 0.18 0.33 0.23 0.18) *
+##       11) magnet_dumbbell_y&gt;=439.5 2529  1243 B (0.032 0.51 0.043 0.22 0.19) *
+##    3) roll_belt&gt;=130.5 1645    14 E (0.0085 0 0 0 0.99) *
+</code></pre>
+
+<pre><code class="r">print(modFitCT)
+</code></pre>
+
+<pre><code>## CART 
+## 
+## 19622 samples
+##    52 predictors
+##     5 classes: &#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;E&#39; 
+## 
+## No pre-processing
+## Resampling: Bootstrapped (25 reps) 
+## 
+## Summary of sample sizes: 19622, 19622, 19622, 19622, 19622, 19622, ... 
+## 
+## Resampling results across tuning parameters:
+## 
+##   cp    Accuracy  Kappa  Accuracy SD  Kappa SD
+##   0.04  0.5       0.4    0.03         0.04    
+##   0.06  0.4       0.2    0.06         0.1     
+##   0.1   0.3       0.07   0.04         0.06    
+## 
+## Accuracy was used to select the optimal model using  the largest value.
+## The final value used for the model was cp = 0.04.
+</code></pre>
+
+<pre><code class="r">plot(modFitCT$finalModel, uniform=TRUE, main=&quot;Classification Tree&quot;)
+text(modFitCT$finalModel, use.n = TRUE, all = TRUE, cex = .8)
+</code></pre>
+
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfgAAAH4CAMAAACR9g9NAAABcVBMVEX9/v0AAAAAACgAADEAADkAAGUADQAADVEAFwAAF2YAIHsAKAAAKGYAOSgAOTkAOXsAOY8AOigASLUAWGYAZrUNAAAXAFcgMY8gOXsgUZwoAAAoACgoOQAoOgAoZtooj9oxUTExUVc5AAA5ADk5AGU5KGU5OTk5OY85Zlc5ZmU5ZrU5e3s5j5w5j7U5j9o5nP1IAGVIFwBIj9pItf1RFwBRMQBXAChXAEhlAABlADllAGVlOTllOWZlOY9lZjllZldlZmVlj9pltbVltdpltf1mFwBmWABm2/17IBd7Zo+BKACBZgCPKCiPOQCPOTmPOWWPZo+Pj7WP27WP2/2cjzmc/v21WAC1ZgC1Zjm1j4+1tWW124+12/21/rW1/tq1/v27UQ27URe7jzm7/v3aZhfaeznajyjajzHajznaj2XatVfatWXa24/a/rXa/tra/v39gSj9tVf9tWX924/927X9/oH9/pz9/rX9/rv9/tr9/v0qAg+TAAAAe3RSTlP//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wCTw6jqAAAACXBIWXMAAAsSAAALEgHS3X78AAAV1klEQVR4nO2dCZvbyFaGb0E322VpwFx2BpqQTALostPJkJCA72XtLBjQDAOYHYWQeJABY/166lSV5FWq2LJPH9X53qcft5bjch29rpJkV3d9rQIq+dpdVwDcDRCvFIhXCsQrBeKVAvFKgXilQLxSIF4pEK8UiFcKxCsF4pUC8UqBeKVAvFIgXikQrxSIVwrEKwXilQLxSoF4pUC8UiBeKSmJX9wYYzL6fTltj7H75tfm4i/2BuXjjmcvb41jdKoK3yUJiS9rLV3iHbkZH7jDAfEisVpsay/MxcSJp7fBxaSi1m3ofRB+231/T/6u3lMQqaSdPtiJHfm3TeE7j+Xt5d/4EM/8+mpmN148o7Ipxr1RmoUBkY5458RK8Z216/bN1Wz395p434Sb4A8r8Xlo2qGRjzZexG28mvmYrKqahSGRjviyOfR1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" alt="plot of chunk unnamed-chunk-5"/> </p>
+
+<h2>Building a model by Random Forest</h2>
+
+<pre><code class="r">modFitRF &lt;- train(classe ~ .,
+                data = tmpTrain, method=&quot;rf&quot;, prox = TRUE)
+</code></pre>
+
+<pre><code>## Loading required package: randomForest
+## randomForest 4.6-7
+## Type rfNews() to see new features/changes/bug fixes.
+</code></pre>
+
+<pre><code>## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample01: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample01: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample01: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample02: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample02: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample02: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample03: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample03: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample03: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample04: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample04: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample04: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample05: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample05: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample05: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample06: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample06: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample06: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample07: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample07: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample07: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample08: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample08: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample08: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample09: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample09: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample09: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample10: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample10: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample10: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample11: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample11: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample11: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample12: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample12: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample12: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample13: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample13: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample13: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample14: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample14: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample14: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample15: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample15: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample15: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample16: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample16: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample16: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample17: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample17: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample17: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample18: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample18: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample18: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample19: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample19: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample19: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample20: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample20: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample20: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample21: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample21: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample21: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample22: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample22: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample22: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample23: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample23: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample23: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample24: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample24: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample24: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample25: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample25: mtry=27 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: Reached total allocation of 1535Mb: see help(memory.size)
+## Warning: model fit failed for Resample25: mtry=52 Error : cannot allocate vector of size 2.9 Gb
+## 
+## Warning: There were missing values in resampled performance measures.
+## Warning: missing values found in aggregated results
+</code></pre>
+
+<pre><code>## Error: final tuning parameters could not be determined
+</code></pre>
+
+<pre><code class="r">modFitRF$finalModel
+</code></pre>
+
+<pre><code>## Error: object &#39;modFitRF&#39; not found
+</code></pre>
+
+<pre><code class="r">print(modFitRF)
+</code></pre>
+
+<pre><code>## Error: object &#39;modFitRF&#39; not found
+</code></pre>
+
+<pre><code class="r">plot(modFitRF$finalModel, uniform=TRUE, main=&quot;Random Forest&quot;)
+</code></pre>
+
+<pre><code>## Error: object &#39;modFitRF&#39; not found
+</code></pre>
+
+<pre><code class="r">text(modFitRF$finalModel, use.n = TRUE, all = TRUE, cex = .8)
+</code></pre>
+
+<pre><code>## Error: object &#39;modFitRF&#39; not found
+</code></pre>
+
+<h1>Prediction</h1>
+
+<h2>Prediction with Classification Tree</h2>
+
+<pre><code class="r">predCT &lt;- predict(modFitCT, tmpTest)
+print(predCT)
+</code></pre>
+
+<pre><code>##  [1] C A C A A C C A A A C C C A C A A A A C
+## Levels: A B C D E
+</code></pre>
+
+<pre><code class="r">summary(predCT)
+</code></pre>
+
+<pre><code>##  A  B  C  D  E 
+## 11  0  9  0  0
+</code></pre>
+
+<pre><code class="r">table(training$classe, predict(modFitCT, training))
+</code></pre>
+
+<pre><code>##    
+##        A    B    C    D    E
+##   A 5080   81  405    0   14
+##   B 1581 1286  930    0    0
+##   C 1587  108 1727    0    0
+##   D 1449  568 1199    0    0
+##   E  524  486  966    0 1631
+</code></pre>
+
+<h2>Prediction wiht Random Forest</h2>
+
+<pre><code class="r">predRF &lt;- predict(modFitRF, tmpTest)
+</code></pre>
+
+<pre><code>## Error: object &#39;modFitRF&#39; not found
+</code></pre>
+
+<pre><code class="r">print(predRF)
+</code></pre>
+
+<pre><code>## Error: object &#39;predRF&#39; not found
+</code></pre>
+
+<pre><code class="r">summary(predRF)
+</code></pre>
+
+<pre><code>## Error: object &#39;predRF&#39; not found
+</code></pre>
+
+<pre><code class="r">table(training$classe, predict(modFitRF, training))
+</code></pre>
+
+<pre><code>## Error: object &#39;modFitRF&#39; not found
+</code></pre>
+
+</body>
+
+</html>
+

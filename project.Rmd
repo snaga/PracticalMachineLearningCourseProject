@@ -1,0 +1,119 @@
+# Data Loading
+
+```{r cahce=TRUE}
+library(caret)
+training <- read.csv("pml-training.csv", header = TRUE)
+testing  <- read.csv("pml-testing.csv", header = TRUE)
+```
+
+## Summary of Data
+
+```{r cahce=TRUE}
+nrow(training)
+names(training)
+
+nrow(testing)
+names(testing)
+
+summary(training)
+summary(testing)
+```
+
+# Data Preparation
+
+## Specify column names to be used in training, and convert them to column index numbers.
+
+```{r cahce=TRUE}
+column_name <- c("roll_belt","pitch_belt","yaw_belt","total_accel_belt","gyros_belt_x",
+                 "gyros_belt_y","gyros_belt_z","accel_belt_x","accel_belt_y",
+                 "accel_belt_z","magnet_belt_x","magnet_belt_y","magnet_belt_z",
+                 "roll_arm","pitch_arm","yaw_arm","total_accel_arm","gyros_arm_x",
+                 "gyros_arm_y","gyros_arm_z","accel_arm_x","accel_arm_y","accel_arm_z",
+                 "magnet_arm_x","magnet_arm_y","magnet_arm_z","roll_dumbbell",
+                 "pitch_dumbbell","yaw_dumbbell","total_accel_dumbbell",
+                 "gyros_dumbbell_x","gyros_dumbbell_y","gyros_dumbbell_z",
+                 "accel_dumbbell_x","accel_dumbbell_y","accel_dumbbell_z",
+                 "magnet_dumbbell_x","magnet_dumbbell_y","magnet_dumbbell_z",
+                 "roll_forearm","pitch_forearm","yaw_forearm",
+                 "total_accel_forearm",
+                 "gyros_forearm_x","gyros_forearm_y","gyros_forearm_z",
+                 "accel_forearm_x","accel_forearm_y","accel_forearm_z",
+                 "magnet_forearm_x","magnet_forearm_y","magnet_forearm_z")
+
+column_id <- c()
+for (i in 1:length(names(training)))
+{
+    if ( names(training)[i] %in% column_name )
+    {
+        print(names(training)[i])
+        column_id <- c(column_id, i)
+    }
+}
+```
+
+## Select columns from the data frames to be used in training, and convert them to numeric.
+
+```{r cahce=TRUE}
+for (i in 1:length(column_id))
+{
+    training[,column_id[i]] <- as.numeric(training[,column_id[i]])
+}
+for (i in 1:length(column_id))
+{
+    testing[,column_id[i]] <- as.numeric(testing[,column_id[i]])
+}
+
+tmpTrain <- training[, c(column_id, 160)]
+names(tmpTrain)
+summary(tmpTrain)
+
+tmpTest <- testing[, c(column_id, 160)]
+names(tmpTest)
+summary(tmpTest)
+```
+
+# Building a model
+
+## Building a model by Classification
+
+```{r cahce=TRUE}
+modFitCT <- train(classe ~ .,
+                  data = tmpTrain, method="rpart")
+modFitCT$finalModel
+print(modFitCT)
+
+plot(modFitCT$finalModel, uniform=TRUE, main="Classification Tree")
+text(modFitCT$finalModel, use.n = TRUE, all = TRUE, cex = .8)
+```
+
+## Building a model by Random Forest
+
+```{r cahce=TRUE}
+modFitRF <- train(classe ~ .,
+                data = tmpTrain, method="rf", prox = TRUE)
+modFitRF$finalModel
+print(modFitRF)
+
+plot(modFitRF$finalModel, uniform=TRUE, main="Random Forest")
+text(modFitRF$finalModel, use.n = TRUE, all = TRUE, cex = .8)
+```
+
+# Prediction
+
+## Prediction with Classification Tree
+
+```{r cache=TRUE}
+predCT <- predict(modFitCT, tmpTest)
+print(predCT)
+summary(predCT)
+table(training$classe, predict(modFitCT, training))
+```
+
+## Prediction wiht Random Forest
+
+```{r cache=TRUE}
+predRF <- predict(modFitRF, tmpTest)
+print(predRF)
+summary(predRF)
+table(training$classe, predict(modFitRF, training))
+```
