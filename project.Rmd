@@ -70,15 +70,22 @@ summary(tmpTrain)
 tmpTest <- testing[, c(column_id, 160)]
 names(tmpTest)
 summary(tmpTest)
+
+inTrain <- createDataPartition(y = tmpTrain$classe,
+                               p = 0.75,
+                               list = FALSE)
+summary(inTrain)
+tmp2Train <- tmpTrain[inTrain,]
+tmp2Test <- tmpTrain[-inTrain,]
 ```
 
 # Building a model
 
-## Building a model by Classification
+## Building a model by Classification Tree
 
 ```{r cahce=TRUE}
 modFitCT <- train(classe ~ .,
-                  data = tmpTrain, method="rpart")
+                  data = tmp2Train, method="rpart")
 modFitCT$finalModel
 print(modFitCT)
 
@@ -86,19 +93,14 @@ plot(modFitCT$finalModel, uniform=TRUE, main="Classification Tree")
 text(modFitCT$finalModel, use.n = TRUE, all = TRUE, cex = .8)
 ```
 
-## Building a model by Random Forest
+## Cross-validation
 
 ```{r cahce=TRUE}
-modFitRF <- train(classe ~ .,
-                data = tmpTrain, method="rf", prox = TRUE)
-modFitRF$finalModel
-print(modFitRF)
-
-plot(modFitRF$finalModel, uniform=TRUE, main="Random Forest")
-text(modFitRF$finalModel, use.n = TRUE, all = TRUE, cex = .8)
+predCT <- predict(modFitCT, tmp2Test)
+print(predCT)
+summary(predCT)
+table(tmp2Test$classe, predict(modFitCT, tmp2Test))
 ```
-
-# Prediction
 
 ## Prediction with Classification Tree
 
@@ -106,14 +108,4 @@ text(modFitRF$finalModel, use.n = TRUE, all = TRUE, cex = .8)
 predCT <- predict(modFitCT, tmpTest)
 print(predCT)
 summary(predCT)
-table(training$classe, predict(modFitCT, training))
-```
-
-## Prediction wiht Random Forest
-
-```{r cache=TRUE}
-predRF <- predict(modFitRF, tmpTest)
-print(predRF)
-summary(predRF)
-table(training$classe, predict(modFitRF, training))
 ```

@@ -189,7 +189,7 @@ hljs.initHighlightingOnLoad();
 </code></pre>
 
 <pre><code class="r">training &lt;- read.csv(&quot;pml-training.csv&quot;, header = TRUE)
-testing  &lt;- read.csv(&quot;pml-testing.csv&quot;, header = TRUE)
+testing &lt;- read.csv(&quot;pml-testing.csv&quot;, header = TRUE)
 </code></pre>
 
 <h2>Summary of Data</h2>
@@ -285,7 +285,8 @@ testing  &lt;- read.csv(&quot;pml-testing.csv&quot;, header = TRUE)
 ## [159] &quot;magnet_forearm_z&quot;         &quot;classe&quot;
 </code></pre>
 
-<pre><code class="r">nrow(testing)
+<pre><code class="r">
+nrow(testing)
 </code></pre>
 
 <pre><code>## [1] 20
@@ -376,7 +377,8 @@ testing  &lt;- read.csv(&quot;pml-testing.csv&quot;, header = TRUE)
 ## [159] &quot;magnet_forearm_z&quot;         &quot;problem_id&quot;
 </code></pre>
 
-<pre><code class="r">summary(training)
+<pre><code class="r">
+summary(training)
 </code></pre>
 
 <pre><code>##        X            user_name    raw_timestamp_part_1 raw_timestamp_part_2
@@ -1078,27 +1080,22 @@ testing  &lt;- read.csv(&quot;pml-testing.csv&quot;, header = TRUE)
 
 <h2>Specify column names to be used in training, and convert them to column index numbers.</h2>
 
-<pre><code class="r">column_name &lt;- c(&quot;roll_belt&quot;,&quot;pitch_belt&quot;,&quot;yaw_belt&quot;,&quot;total_accel_belt&quot;,&quot;gyros_belt_x&quot;,
-                 &quot;gyros_belt_y&quot;,&quot;gyros_belt_z&quot;,&quot;accel_belt_x&quot;,&quot;accel_belt_y&quot;,
-                 &quot;accel_belt_z&quot;,&quot;magnet_belt_x&quot;,&quot;magnet_belt_y&quot;,&quot;magnet_belt_z&quot;,
-                 &quot;roll_arm&quot;,&quot;pitch_arm&quot;,&quot;yaw_arm&quot;,&quot;total_accel_arm&quot;,&quot;gyros_arm_x&quot;,
-                 &quot;gyros_arm_y&quot;,&quot;gyros_arm_z&quot;,&quot;accel_arm_x&quot;,&quot;accel_arm_y&quot;,&quot;accel_arm_z&quot;,
-                 &quot;magnet_arm_x&quot;,&quot;magnet_arm_y&quot;,&quot;magnet_arm_z&quot;,&quot;roll_dumbbell&quot;,
-                 &quot;pitch_dumbbell&quot;,&quot;yaw_dumbbell&quot;,&quot;total_accel_dumbbell&quot;,
-                 &quot;gyros_dumbbell_x&quot;,&quot;gyros_dumbbell_y&quot;,&quot;gyros_dumbbell_z&quot;,
-                 &quot;accel_dumbbell_x&quot;,&quot;accel_dumbbell_y&quot;,&quot;accel_dumbbell_z&quot;,
-                 &quot;magnet_dumbbell_x&quot;,&quot;magnet_dumbbell_y&quot;,&quot;magnet_dumbbell_z&quot;,
-                 &quot;roll_forearm&quot;,&quot;pitch_forearm&quot;,&quot;yaw_forearm&quot;,
-                 &quot;total_accel_forearm&quot;,
-                 &quot;gyros_forearm_x&quot;,&quot;gyros_forearm_y&quot;,&quot;gyros_forearm_z&quot;,
-                 &quot;accel_forearm_x&quot;,&quot;accel_forearm_y&quot;,&quot;accel_forearm_z&quot;,
-                 &quot;magnet_forearm_x&quot;,&quot;magnet_forearm_y&quot;,&quot;magnet_forearm_z&quot;)
+<pre><code class="r">column_name &lt;- c(&quot;roll_belt&quot;, &quot;pitch_belt&quot;, &quot;yaw_belt&quot;, &quot;total_accel_belt&quot;, 
+    &quot;gyros_belt_x&quot;, &quot;gyros_belt_y&quot;, &quot;gyros_belt_z&quot;, &quot;accel_belt_x&quot;, &quot;accel_belt_y&quot;, 
+    &quot;accel_belt_z&quot;, &quot;magnet_belt_x&quot;, &quot;magnet_belt_y&quot;, &quot;magnet_belt_z&quot;, &quot;roll_arm&quot;, 
+    &quot;pitch_arm&quot;, &quot;yaw_arm&quot;, &quot;total_accel_arm&quot;, &quot;gyros_arm_x&quot;, &quot;gyros_arm_y&quot;, 
+    &quot;gyros_arm_z&quot;, &quot;accel_arm_x&quot;, &quot;accel_arm_y&quot;, &quot;accel_arm_z&quot;, &quot;magnet_arm_x&quot;, 
+    &quot;magnet_arm_y&quot;, &quot;magnet_arm_z&quot;, &quot;roll_dumbbell&quot;, &quot;pitch_dumbbell&quot;, &quot;yaw_dumbbell&quot;, 
+    &quot;total_accel_dumbbell&quot;, &quot;gyros_dumbbell_x&quot;, &quot;gyros_dumbbell_y&quot;, &quot;gyros_dumbbell_z&quot;, 
+    &quot;accel_dumbbell_x&quot;, &quot;accel_dumbbell_y&quot;, &quot;accel_dumbbell_z&quot;, &quot;magnet_dumbbell_x&quot;, 
+    &quot;magnet_dumbbell_y&quot;, &quot;magnet_dumbbell_z&quot;, &quot;roll_forearm&quot;, &quot;pitch_forearm&quot;, 
+    &quot;yaw_forearm&quot;, &quot;total_accel_forearm&quot;, &quot;gyros_forearm_x&quot;, &quot;gyros_forearm_y&quot;, 
+    &quot;gyros_forearm_z&quot;, &quot;accel_forearm_x&quot;, &quot;accel_forearm_y&quot;, &quot;accel_forearm_z&quot;, 
+    &quot;magnet_forearm_x&quot;, &quot;magnet_forearm_y&quot;, &quot;magnet_forearm_z&quot;)
 
 column_id &lt;- c()
-for (i in 1:length(names(training)))
-{
-    if ( names(training)[i] %in% column_name )
-    {
+for (i in 1:length(names(training))) {
+    if (names(training)[i] %in% column_name) {
         print(names(training)[i])
         column_id &lt;- c(column_id, i)
     }
@@ -1161,13 +1158,11 @@ for (i in 1:length(names(training)))
 
 <h2>Select columns from the data frames to be used in training, and convert them to numeric.</h2>
 
-<pre><code class="r">for (i in 1:length(column_id))
-{
-    training[,column_id[i]] &lt;- as.numeric(training[,column_id[i]])
+<pre><code class="r">for (i in 1:length(column_id)) {
+    training[, column_id[i]] &lt;- as.numeric(training[, column_id[i]])
 }
-for (i in 1:length(column_id))
-{
-    testing[,column_id[i]] &lt;- as.numeric(testing[,column_id[i]])
+for (i in 1:length(column_id)) {
+    testing[, column_id[i]] &lt;- as.numeric(testing[, column_id[i]])
 }
 
 tmpTrain &lt;- training[, c(column_id, 160)]
@@ -1297,7 +1292,8 @@ names(tmpTrain)
 ## 
 </code></pre>
 
-<pre><code class="r">tmpTest &lt;- testing[, c(column_id, 160)]
+<pre><code class="r">
+tmpTest &lt;- testing[, c(column_id, 160)]
 names(tmpTest)
 </code></pre>
 
@@ -1424,12 +1420,29 @@ names(tmpTest)
 ##  Max.   :20.00
 </code></pre>
 
+<pre><code class="r">
+inTrain &lt;- createDataPartition(y = tmpTrain$classe, p = 0.75, list = FALSE)
+summary(inTrain)
+</code></pre>
+
+<pre><code>##    Resample1    
+##  Min.   :    1  
+##  1st Qu.: 4919  
+##  Median : 9816  
+##  Mean   : 9814  
+##  3rd Qu.:14724  
+##  Max.   :19621
+</code></pre>
+
+<pre><code class="r">tmp2Train &lt;- tmpTrain[inTrain, ]
+tmp2Test &lt;- tmpTrain[-inTrain, ]
+</code></pre>
+
 <h1>Building a model</h1>
 
-<h2>Building a model by Classification</h2>
+<h2>Building a model by Classification Tree</h2>
 
-<pre><code class="r">modFitCT &lt;- train(classe ~ .,
-                  data = tmpTrain, method=&quot;rpart&quot;)
+<pre><code class="r">modFitCT &lt;- train(classe ~ ., data = tmp2Train, method = &quot;rpart&quot;)
 </code></pre>
 
 <pre><code>## Loading required package: rpart
@@ -1438,20 +1451,28 @@ names(tmpTest)
 <pre><code class="r">modFitCT$finalModel
 </code></pre>
 
-<pre><code>## n= 19622 
+<pre><code>## n= 14718 
 ## 
 ## node), split, n, loss, yval, (yprob)
 ##       * denotes terminal node
 ## 
-##  1) root 19622 14040 A (0.28 0.19 0.17 0.16 0.18)  
-##    2) roll_belt&lt; 130.5 17977 12410 A (0.31 0.21 0.19 0.18 0.11)  
-##      4) pitch_forearm&lt; -33.95 1578    10 A (0.99 0.0063 0 0 0) *
-##      5) pitch_forearm&gt;=-33.95 16399 12400 A (0.24 0.23 0.21 0.2 0.12)  
-##       10) magnet_dumbbell_y&lt; 439.5 13870  9953 A (0.28 0.18 0.24 0.19 0.11)  
-##         20) roll_forearm&lt; 123.5 8643  5131 A (0.41 0.18 0.18 0.17 0.061) *
-##         21) roll_forearm&gt;=123.5 5227  3500 C (0.077 0.18 0.33 0.23 0.18) *
-##       11) magnet_dumbbell_y&gt;=439.5 2529  1243 B (0.032 0.51 0.043 0.22 0.19) *
-##    3) roll_belt&gt;=130.5 1645    14 E (0.0085 0 0 0 0.99) *
+##   1) root 14718 10530 A (0.28 0.19 0.17 0.16 0.18)  
+##     2) roll_belt&lt; 130.5 13510  9334 A (0.31 0.21 0.19 0.18 0.11)  
+##       4) pitch_forearm&lt; -33.95 1187     8 A (0.99 0.0067 0 0 0) *
+##       5) pitch_forearm&gt;=-33.95 12323  9326 A (0.24 0.23 0.21 0.2 0.12)  
+##        10) yaw_belt&gt;=169.5 603    65 A (0.89 0.05 0 0.05 0.0083) *
+##        11) yaw_belt&lt; 169.5 11720  8910 B (0.21 0.24 0.22 0.2 0.13)  
+##          22) magnet_dumbbell_z&lt; -87.5 1554   658 A (0.58 0.28 0.048 0.07 0.022) *
+##          23) magnet_dumbbell_z&gt;=-87.5 10166  7673 C (0.15 0.23 0.25 0.22 0.14)  
+##            46) pitch_belt&lt; -42.95 594    98 B (0.019 0.84 0.098 0.024 0.025) *
+##            47) pitch_belt&gt;=-42.95 9572  7137 C (0.16 0.2 0.25 0.24 0.15)  
+##              94) magnet_dumbbell_y&lt; 292.5 4229  2500 C (0.19 0.12 0.41 0.16 0.13) *
+##              95) magnet_dumbbell_y&gt;=292.5 5343  3766 D (0.14 0.26 0.13 0.3 0.17)  
+##               190) accel_dumbbell_y&gt;=-45.5 4886  3322 D (0.16 0.28 0.066 0.32 0.18)  
+##                 380) accel_forearm_x&gt;=-100.5 2746  1848 B (0.19 0.33 0.098 0.13 0.26) *
+##                 381) accel_forearm_x&lt; -100.5 2140   937 D (0.12 0.21 0.025 0.56 0.083) *
+##               191) accel_dumbbell_y&lt; -45.5 457    73 C (0 0.059 0.84 0.028 0.072) *
+##     3) roll_belt&gt;=130.5 1208     9 E (0.0075 0 0 0 0.99) *
 </code></pre>
 
 <pre><code class="r">print(modFitCT)
@@ -1459,525 +1480,205 @@ names(tmpTest)
 
 <pre><code>## CART 
 ## 
-## 19622 samples
+## 14718 samples
 ##    52 predictors
 ##     5 classes: &#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;E&#39; 
 ## 
 ## No pre-processing
 ## Resampling: Bootstrapped (25 reps) 
 ## 
-## Summary of sample sizes: 19622, 19622, 19622, 19622, 19622, 19622, ... 
+## Summary of sample sizes: 14718, 14718, 14718, 14718, 14718, 14718, ... 
 ## 
 ## Resampling results across tuning parameters:
 ## 
 ##   cp    Accuracy  Kappa  Accuracy SD  Kappa SD
-##   0.04  0.5       0.4    0.03         0.04    
-##   0.06  0.4       0.2    0.06         0.1     
+##   0.03  0.6       0.4    0.02         0.04    
+##   0.04  0.5       0.4    0.05         0.09    
 ##   0.1   0.3       0.07   0.04         0.06    
 ## 
 ## Accuracy was used to select the optimal model using  the largest value.
-## The final value used for the model was cp = 0.04.
+## The final value used for the model was cp = 0.03.
 </code></pre>
 
-<pre><code class="r">plot(modFitCT$finalModel, uniform=TRUE, main=&quot;Classification Tree&quot;)
-text(modFitCT$finalModel, use.n = TRUE, all = TRUE, cex = .8)
+<pre><code class="r">
+plot(modFitCT$finalModel, uniform = TRUE, main = &quot;Classification Tree&quot;)
+text(modFitCT$finalModel, use.n = TRUE, all = TRUE, cex = 0.8)
 </code></pre>
 
-<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfgAAAH4CAMAAACR9g9NAAABcVBMVEX9/v0AAAAAACgAADEAADkAAGUADQAADVEAFwAAF2YAIHsAKAAAKGYAOSgAOTkAOXsAOY8AOigASLUAWGYAZrUNAAAXAFcgMY8gOXsgUZwoAAAoACgoOQAoOgAoZtooj9oxUTExUVc5AAA5ADk5AGU5KGU5OTk5OY85Zlc5ZmU5ZrU5e3s5j5w5j7U5j9o5nP1IAGVIFwBIj9pItf1RFwBRMQBXAChXAEhlAABlADllAGVlOTllOWZlOY9lZjllZldlZmVlj9pltbVltdpltf1mFwBmWABm2/17IBd7Zo+BKACBZgCPKCiPOQCPOTmPOWWPZo+Pj7WP27WP2/2cjzmc/v21WAC1ZgC1Zjm1j4+1tWW124+12/21/rW1/tq1/v27UQ27URe7jzm7/v3aZhfaeznajyjajzHajznaj2XatVfatWXa24/a/rXa/tra/v39gSj9tVf9tWX924/927X9/oH9/pz9/rX9/rv9/tr9/v0qAg+TAAAAe3RSTlP//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wCTw6jqAAAACXBIWXMAAAsSAAALEgHS3X78AAAV1klEQVR4nO2dCZvbyFaGb0E322VpwFx2BpqQTALostPJkJCA72XtLBjQDAOYHYWQeJABY/166lSV5FWq2LJPH9X53qcft5bjch29rpJkV3d9rQIq+dpdVwDcDRCvFIhXCsQrBeKVAvFKgXilQLxSIF4pEK8UiFcKxCsF4pUC8UqBeKVAvFIgXikQrxSIVwrEKwXilQLxSoF4pUC8UiBeKSmJX9wYYzL6fTltj7H75tfm4i/2BuXjjmcvb41jdKoK3yUJiS9rLV3iHbkZH7jDAfEisVpsay/MxcSJp7fBxaSi1m3ofRB+231/T/6u3lMQqaSdPtiJHfm3TeE7j+Xt5d/4EM/8+mpmN148o7Ipxr1RmoUBkY5458RK8Z216/bN1Wz395p434Sb4A8r8Xlo2qGRjzZexG28mvmYrKqahSGRjviyOfR1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" alt="plot of chunk unnamed-chunk-5"/> </p>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfgAAAH4CAMAAACR9g9NAAACWFBMVEX9/v0AAAAAAA0AABcAACAAACgAADkAAEgAAGUADQAADVEAFwAAFygAF0gAF1EAF2YAICAAIHsAKAAAKDkAKGYAKIEAKI8AMVEAMY8AOSgAOTkAOWYAOY8AOZwAOigAOpwASEgASLUASbUAWGYAZoEAZpwAZrUNIHsNUbsXAAAXAFcXZtogIAAgIFcgOnsgUZwge9ooAAAoACgoAFcoAGUoOQAoOY8oOgAoUbsogf0oj9oxUTExUVcxj9o5AAA5ADk5AEg5AGU5KGU5OTk5OY85Zlc5ZmU5Zo85ZrU5e3s5j5w5j7U5j7s5j9o5nP1IAABIAGVIj9pItf1RDShRFwBRFzlRKFFRMQBRvP1XABdXAChXAEhXAGVXOhdXUTFXZjlXj9pXtf1lAABlADllAFdlAGVlOShlOTllOWZlOY9lZjllZldlZmVlZo9lgWVlj9pltbVltdpltf1mFwBmKABmOQBmOWVmOgBmWABmZo9m2/17IBd7USh7ezl72/2BKACBZgCB/v2PKCiPOQCPOSiPOTmPOUiPOVePOWWPSTmPZmWPZo+Pj4GPj7WPnGWPtY+P27WP29qP2/2cOQCcOgCcZgCcjzmcj2Wc/v21SAC1SQC1ZgC1Zii1Zjm1jzm1j4+1tWW124+12/21/rW1/tq1/v27UQ27USi7jzm7/tq7/v3aZhfaZijaeyDajyjajzHajznaj1faj2XatUjatWXa24/a/rXa/tra/v39gSj9nDn9tUj9tVf9tWX9vFH922b924/927X9/oH9/pz9/rX9/rv9/tr9/v0Oa5hpAAAAyHRSTlP/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////APaacccAAAAJcEhZcwAACxIAAAsSAdLdfvwAAB32SURBVHic7Z2NgxxnXcd5UM4D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+PhvWFPUpdYragqOjXySipqC+529Uy+9cfr9ja/a+k8df3I3sgYqmG1dEm+a5hZMr/zIC9ZG+ilnpsSmQUHkIQWy1OhDSj7mZcIHvPmA9mx1qfqcWCdWcMt4/4Pqone/owpIVKr8pP7FL9wuV3itHyv4wNH/umGSV+D4/3p4Mv8zIQ76suD4U/NHDkYKIg8pkKXSY8t6zMuED3j9Ae056lLafp50ogUX3k5eUXlRyUZv9caueBd9jPTs6vGLWjx69zha8K1fnFzJLZDjv+PshCylX9EFxx+5MzpE8JACWSo9tqzHvFT4gEdiAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXimAXim+X95LlWCeFRLcwAAAABJRU5ErkJggg==" alt="plot of chunk unnamed-chunk-5"/> </p>
 
-<h2>Building a model by Random Forest</h2>
+<h2>Cross-validation</h2>
 
-<pre><code class="r">modFitRF &lt;- train(classe ~ .,
-                data = tmpTrain, method=&quot;rf&quot;, prox = TRUE)
+<pre><code class="r">predCT &lt;- predict(modFitCT, tmp2Test)
+print(predCT)
 </code></pre>
 
-<pre><code>## Loading required package: randomForest
-## randomForest 4.6-7
-## Type rfNews() to see new features/changes/bug fixes.
+<pre><code>##    [1] A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A
+##   [35] A A A A A A A A C C C C C C C C C C C C C C C C C C C C C C C C C C
+##   [69] C C C C C C C C C C C C A A A C A A C C C C C C C C C C C C C C C C
+##  [103] A A A A A A A A A A C C C C C C C A A A A A A A A A A A A A C A A A
+##  [137] A C C C C C C C C C A A A A A A A A A A A A A C C A A A A A A A A A
+##  [171] A A A A A A A A A A A A A C C C C C C C C C C C C C C C C C C C C C
+##  [205] C C C C C C C C C C C C C C C C C C A A A A A C C C C C C C C C A A
+##  [239] A A C C C C C C C C C C C C C C C C A A A A B C C C E E E E E C C C
+##  [273] C C C C C C C C C C C C C C C C C C C C C C C C B C C C C B B B B B
+##  [307] B B C A B A A A A A A A A A A A A A A A A A A A A A A A A A A A A A
+##  [341] A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A
+##  [375] A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A
+##  [409] A A A A A A A A A A A A A A A A A A A A A A A A A A A A A C C B B B
+##  [443] B B B B B B B B A C C A C C C B C C A C C C B B B B C C C C B B B B
+##  [477] B B B C C B B B B B C C C C C C C B B B B B B B B B C C C C C C C B
+##  [511] B B B B B B B B C C C C C C C C C C C C C C C C C C C C C C C B B B
+##  [545] B B D D D D D D D D D B C C C C C C C C C C B B A A A A A A A A A A
+##  [579] A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A
+##  [613] A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A
+##  [647] A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A
+##  [681] A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A
+##  [715] A A A A A A A A A A B B D D D D D D D D D D D B A A A A A A A B B D
+##  [749] D D D D D D D D B B A A A A A B D D D D A A B B A A B B B B B D D D
+##  [783] C C D D D D B D C D D B B B A A B D D D B B B A A A A B D D B B D D
+##  [817] B A A A B B B B D D D D D A A A A A A A A A A A A A A A A A A A A A
+##  [851] A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A
+##  [885] A A A A A A A A A A A A A A A A A A B B B B B B D D D B D B B B B B
+##  [919] B D D D B D B B B B B B D B B B A A B D D D D B A A B B D D D D D D
+##  [953] D B B A B B B B D D D D D D D D B B A A B B B B B D D B B B B B A A
+##  [987] A B B B C D B B B B B B A B B B D D D D B B D D D D D D A A A A A A
+## [1021] A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A
+## [1055] A A B B B B B C C C C C C C B C C A A A A A A B B A A A A A A A A A
+## [1089] A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A
+## [1123] A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A
+## [1157] A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A
+## [1191] A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A
+## [1225] A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A
+## [1259] A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A
+## [1293] A A A A A A A A A A A A B B B A A A A A A A A A A A B C B B B B C C
+## [1327] C C C C C C C C C B A A A A A A A C A A A A A A A A A A A A A A A C
+## [1361] A C A A A C C C C C C C C C C C C C C C A A A C C C A A A A A A B B
+## [1395] D A A A A A A A A A A A A A A A A C C C C A C A C A A A C C A A A A
+## [1429] A A A A A A C C C A A A A A A A A A A A C C C A A A C C A A A A A A
+## [1463] A A A C C C A A A A A A A A A A C C C C C C C A A A A C C C B B D B
+## [1497] B B B B B B B B B B D D C C C C C C C C B B B B B B B C C B B B B B
+## [1531] B B B B D D D C C C C C C C B B B D D D D D B C C C C C C C C B B B
+## [1565] B B B B B B C C C C C C B B B B B B D D B C C C C C C C B D B B C C
+## [1599] C C C C B B B B D D B B B B D D B B B B D D D D D C C C A B B D D D
+## [1633] D B B B B B B B B B B B B C C C C C C C B B B D D C C C C C B B B B
+## [1667] B B B C C C C B B B C C C C C C C C D D A A A A D D B B B B B B B B
+## [1701] B B B D D D B B B B B B B B B B B B B B B D B B B B B A B A B B B B
+## [1735] B B B A B B B B D D D B B B B B B B B B B B B B B B B B B B B C C B
+## [1769] B B B B B B B B B B B B C B B B B B B B B B B B B B B B B B B B B B
+## [1803] B B B B B B B B B B B B B B B B B B B B B B B B B B B B B C C C B B
+## [1837] B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B
+## [1871] B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B
+## [1905] B B B B B B B B B A A A B B B B B B B B B B B B A A C C C C C B B B
+## [1939] B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B
+## [1973] B B B B B D D D D D D B A A B B D A A A A A A A A A A A A A A A A A
+## [2007] A A A A A A A A A A A A A A A A D D D A A A B B B A D D A A D D D D
+## [2041] D D D B D D D D D D D D D D D D B D B B B B D D D D D D D D B B B D
+## [2075] D D D D D D D D D D D A D A D D D D D D D D D D D D B B B D D D C C
+## [2109] C C C A D A B B B B A D D D D D D C C C D B B B B D D D A A D D D D
+## [2143] D D A B B B B D B B B B B B B B B B B B B B B B B B B B B B B D D D
+## [2177] D D D D B B B D D B B D D D D D A A A D D D A A A A A A A B B B B C
+## [2211] B B B B B B B B B B B B C C B B B B B B B B B C B B B B B C C C C C
+## [2245] C C C C C B B B C B B B B B D B C C C C C C C C C B B B D B D C A A
+## [2279] A A A A A A A A A A A A C A C C C C C C C B B B B B B D D B D D D D
+## [2313] D B B C C B B D D D D B B B C C C B B B B D D B B B C C C C C B C A
+## [2347] A A A A A A A A A A A A A A A A A A A A A A C C C C C C C C C C C C
+## [2381] C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C
+## [2415] C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C
+## [2449] C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C
+## [2483] C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C
+## [2517] C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C
+## [2551] C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C
+## [2585] C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C
+## [2619] C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C
+## [2653] C C C C B B B B B B B B B B B C C C C C C C C C C C C C C C C C C C
+## [2687] C C D D D B B C C C C C B B B C C D D B B B B B C C C C C B B B C C
+## [2721] C B B B B B C C C C C B B B B B B C C C C B B B B B C C B B B B B B
+## [2755] B B B C B B D B B B C C C C C C C C C B B B B B B B B B B B B C C C
+## [2789] C C C C C B B B B B B B D D C C C C C C C C C C C B B C C C C C C C
+## [2823] C C C C C C C C C C C C C C C C C C B B B B C C C C C C C C C C C C
+## [2857] C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C B B B B
+## [2891] C C C C C C C C C C C C C C C C C C C C C C C C C C B B B B B C C C
+## [2925] B B B B C C C C C C C C C C C C B C C C C C C C C C C C C C C C C C
+## [2959] C C B C C C C C C C D D C C C C C C C C B B B B C D D D C C C C C C
+## [2993] C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C D D C C
+## [3027] C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C
+## [3061] C C C C C C C C C C C C C C C C C C C D C C C C C C C C C C C C C C
+## [3095] C C C C C C C C C C C B C C C C C C C C C C C C C C C C C C C C C C
+## [3129] C C C C C C C B B C C C C C C C C C C C C C C C C C C C C C C C C C
+## [3163] A A C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C
+## [3197] C C C D D D D D D D D D D D B B D D D D D D D D D D D D D B B B D D
+## [3231] D D D D D D D D D D B C B C C C C C C C C C C C C C C C C C C C C C
+## [3265] C C C C C C C C C C C A A C C C C C C C C A A A A C A C C C C A C C
+## [3299] C A A A A A A A A A A C A A C C C C A A A A A A C C C C A A A A A A
+## [3333] A C A A A C C C C C C A A A C C C C C C D D D D D D D D D D D D D D
+## [3367] D D D D D D D D D D D D D D D D D D D D D D D D D D D D D D D D D D
+## [3401] D D D D D D D D D D C C C C C C C C C C C C C C C C C C C C C C C C
+## [3435] C C C C B B B B B C C C C C C C C C C C B B B D C C C C C C C C C C
+## [3469] C B B B C C C C C C C C C C C C C C C B B B B B B B D D B D D B B B
+## [3503] B B D D B B B B B B B B B B B B D B B D D D C C C C C C C C C B B B
+## [3537] B B D D D B B B B B B B B B B B D D B D D D D D D D C D D D D C C C
+## [3571] C C D D D D D D D D B B D D D D B D D D D B C C C C C C C C C C D D
+## [3605] D D D D D B C C C D D D D D D D D D D D D D B D D D D D D D D D D D
+## [3639] D B D D D D D D D D D D D D D B D D D D D D D D D D D D D D D D D D
+## [3673] D D D D D D D D D D D D D D D B D D D D D D D D D D D D D D D C C C
+## [3707] C C C C C C C B B B C C C C C C C C C B B B B B B B B B D D D D D D
+## [3741] D D D D D D D D D D D D D D D D D D D D D D D D D D D D D D D D D B
+## [3775] B B B B B B A A A A A A A A A A A A D D D D B B B B B B C C C C C C
+## [3809] C C C C C C B B B C C C C C C C C C C C C C C C C D D D D B D D C D
+## [3843] D D D D D D D B B B B B B D D D D D D D D D D B B B D D D D D B D D
+## [3877] D D D D D D D D D D D D D D D D D D D D D D D D D B B B D D D D D D
+## [3911] D D D D B D D D D D D D D D D D D D D D B D D B D D D D D B B C C C
+## [3945] C C C C C C C D B B B C C C C C C C C B B C C C C C C C A A A A A A
+## [3979] C C C C C C A C C C C C C C D D D B D D D D D D D C C C C C C C C C
+## [4013] C E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E
+## [4047] E E B B C C C C C B B B B B B B B B B B B C C C C C B B B D B B B C
+## [4081] A C C C B B B B B D D B B B B B B B B B A A A C B B B B B D D D C C
+## [4115] C B B C C C C C C C B B D B B B C C C C B B B B D D D C C B B D D D
+## [4149] B B B D D D B B B C C B C C C C C A A A A A A C C E E E E E E E C C
+## [4183] E E E E E E C C C C C E E E E E E E C C C C D D E E E E E E D D D D
+## [4217] D E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E
+## [4251] E E E E E E C C C C E E E E E E E E E D C C E E E E E E E E E E E E
+## [4285] E E E E E E E E D D E E E E E E E E E E E E E E E E E D E E E E E E
+## [4319] E E E E D D D E E E E E E E E E E E E E E E E E E E E E E E E D E E
+## [4353] E E E E E E E E E E E E E E E C C C C C C C C C C C C C C C D D C C
+## [4387] C C C C C B C C C C C C B B B B B B B B B C C C C C B B C C C C B B
+## [4421] B B B B C C C C C B B B B B B B C C C C C B B B B B B B B B B B B B
+## [4455] C C C B B B B B B B B C C C C C C C C C C C C C C C C C C C D D D D
+## [4489] D D D D D D B B B B B B B B B B B B B B B B B B B C C C C C C C C C
+## [4523] C B B B B B B B B B B C B B B B B B B B D C C C D B B B B B B B B B
+## [4557] B B B B B B B B B B B C C C B B B B B B B B B B B B E E E E E E E E
+## [4591] E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E
+## [4625] E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E
+## [4659] E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E
+## [4693] E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E
+## [4727] E E E E E E E C E E E E E E E E E E E E E E E E E E E E E E E E E C
+## [4761] E E E E E E E E E E E E E E E E E E E E E E E E E E B B B C C C C C
+## [4795] C C B C B E E E E B C C C C B B B B B B B B B B B B B B B B B D B B
+## [4829] B B B B B B C C B B B B C C B B C C B B E E E E E E E E E E E E E E
+## [4863] E E A A A A E E E E E E E E E C C C B B B B B B B C C B B B B B B C
+## [4897] C C C A E E E E
+## Levels: A B C D E
 </code></pre>
 
-<pre><code>## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample01: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample01: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample01: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample02: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample02: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample02: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample03: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample03: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample03: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample04: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample04: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample04: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample05: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample05: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample05: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample06: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample06: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample06: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample07: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample07: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample07: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample08: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample08: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample08: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample09: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample09: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample09: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample10: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample10: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample10: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample11: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample11: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample11: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample12: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample12: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample12: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample13: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample13: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample13: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample14: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample14: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample14: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample15: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample15: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample15: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample16: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample16: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample16: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample17: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample17: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample17: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample18: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample18: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample18: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample19: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample19: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample19: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample20: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample20: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample20: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample21: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample21: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample21: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample22: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample22: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample22: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample23: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample23: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample23: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample24: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample24: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample24: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample25: mtry= 2 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample25: mtry=27 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: Reached total allocation of 1535Mb: see help(memory.size)
-## Warning: model fit failed for Resample25: mtry=52 Error : cannot allocate vector of size 2.9 Gb
-## 
-## Warning: There were missing values in resampled performance measures.
-## Warning: missing values found in aggregated results
+<pre><code class="r">summary(predCT)
 </code></pre>
 
-<pre><code>## Error: final tuning parameters could not be determined
+<pre><code>##    A    B    C    D    E 
+## 1089 1097 1591  690  437
 </code></pre>
 
-<pre><code class="r">modFitRF$finalModel
+<pre><code class="r">table(tmp2Test$classe, predict(modFitCT, tmp2Test))
 </code></pre>
 
-<pre><code>## Error: object &#39;modFitRF&#39; not found
+<pre><code>##    
+##       A   B   C   D   E
+##   A 836 173 284  97   5
+##   B 155 473 162 159   0
+##   C  25 101 713  16   0
+##   D  58 124 250 372   0
+##   E  15 226 182  46 432
 </code></pre>
-
-<pre><code class="r">print(modFitRF)
-</code></pre>
-
-<pre><code>## Error: object &#39;modFitRF&#39; not found
-</code></pre>
-
-<pre><code class="r">plot(modFitRF$finalModel, uniform=TRUE, main=&quot;Random Forest&quot;)
-</code></pre>
-
-<pre><code>## Error: object &#39;modFitRF&#39; not found
-</code></pre>
-
-<pre><code class="r">text(modFitRF$finalModel, use.n = TRUE, all = TRUE, cex = .8)
-</code></pre>
-
-<pre><code>## Error: object &#39;modFitRF&#39; not found
-</code></pre>
-
-<h1>Prediction</h1>
 
 <h2>Prediction with Classification Tree</h2>
 
@@ -1985,53 +1686,15 @@ text(modFitCT$finalModel, use.n = TRUE, all = TRUE, cex = .8)
 print(predCT)
 </code></pre>
 
-<pre><code>##  [1] C A C A A C C A A A C C C A C A A A A C
+<pre><code>##  [1] C B B C C C D D A A C B C A B B C D C B
 ## Levels: A B C D E
 </code></pre>
 
 <pre><code class="r">summary(predCT)
 </code></pre>
 
-<pre><code>##  A  B  C  D  E 
-## 11  0  9  0  0
-</code></pre>
-
-<pre><code class="r">table(training$classe, predict(modFitCT, training))
-</code></pre>
-
-<pre><code>##    
-##        A    B    C    D    E
-##   A 5080   81  405    0   14
-##   B 1581 1286  930    0    0
-##   C 1587  108 1727    0    0
-##   D 1449  568 1199    0    0
-##   E  524  486  966    0 1631
-</code></pre>
-
-<h2>Prediction wiht Random Forest</h2>
-
-<pre><code class="r">predRF &lt;- predict(modFitRF, tmpTest)
-</code></pre>
-
-<pre><code>## Error: object &#39;modFitRF&#39; not found
-</code></pre>
-
-<pre><code class="r">print(predRF)
-</code></pre>
-
-<pre><code>## Error: object &#39;predRF&#39; not found
-</code></pre>
-
-<pre><code class="r">summary(predRF)
-</code></pre>
-
-<pre><code>## Error: object &#39;predRF&#39; not found
-</code></pre>
-
-<pre><code class="r">table(training$classe, predict(modFitRF, training))
-</code></pre>
-
-<pre><code>## Error: object &#39;modFitRF&#39; not found
+<pre><code>## A B C D E 
+## 3 6 8 3 0
 </code></pre>
 
 </body>
